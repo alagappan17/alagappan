@@ -76,6 +76,12 @@ function App() {
   const gradientY = useMotionValue(42)
   const pointerVelocity = useRef({ x: 0, y: 0 })
   const pointerSpeed = useMotionValue(0)
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false
+    const touchDevice =
+      typeof navigator !== 'undefined' ? navigator.maxTouchPoints > 1 : false
+    return window.innerWidth <= 768 || touchDevice
+  })
 
   const pointerSpeedSpring = useSpring(pointerSpeed, {
     stiffness: 120,
@@ -121,8 +127,43 @@ function App() {
     [0, 1],
     [0.18, 0.45]
   )
+  const mobileBackground =
+    'radial-gradient(140% 140% at 20% 20%, rgba(56, 189, 248, 0.28), transparent 65%), radial-gradient(170% 170% at 80% 60%, rgba(244, 114, 182, 0.24), transparent 70%), linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 64, 175, 0.4))'
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
+
+    const updateIsMobile = () => {
+      const touchDevice =
+        typeof navigator !== 'undefined' ? navigator.maxTouchPoints > 1 : false
+      setIsMobile(mediaQuery.matches || touchDevice)
+    }
+
+    updateIsMobile()
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', updateIsMobile)
+    } else {
+      mediaQuery.addListener(updateIsMobile)
+    }
+
+    window.addEventListener('resize', updateIsMobile)
+
+    return () => {
+      if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', updateIsMobile)
+      } else {
+        mediaQuery.removeListener(updateIsMobile)
+      }
+
+      window.removeEventListener('resize', updateIsMobile)
+    }
+  }, [])
 
   useAnimationFrame((_, delta) => {
+    if (isMobile) return
+
     const xVelocity = BASE_VELOCITY.x + pointerVelocity.current.x
     const yVelocity = BASE_VELOCITY.y + pointerVelocity.current.y
 
@@ -145,6 +186,15 @@ function App() {
     if (Math.abs(pointerVelocity.current.y) < 0.0001)
       pointerVelocity.current.y = 0
   })
+
+  useEffect(() => {
+    if (!isMobile) return
+    gradientX.set(56)
+    gradientY.set(42)
+    pointerVelocity.current.x = 0
+    pointerVelocity.current.y = 0
+    pointerSpeed.set(0)
+  }, [gradientX, gradientY, isMobile, pointerSpeed])
 
   const handleMouseMove = (event: ReactMouseEvent<HTMLDivElement>) => {
     const card = cardRef.current
@@ -210,8 +260,8 @@ function App() {
       const naturalHeight = card.scrollHeight
       const naturalWidth = card.scrollWidth
 
-      const verticalPadding = 96
-      const horizontalPadding = 48
+      const verticalPadding = isMobile ? 72 : 96
+      const horizontalPadding = isMobile ? 32 : 48
 
       const availableHeight = Math.max(
         window.innerHeight - verticalPadding,
@@ -226,7 +276,7 @@ function App() {
       const widthScale = availableWidth / naturalWidth
       const nextScale = clamp(
         Math.min(heightScale, widthScale),
-        CARD_SCALE_MIN,
+        isMobile ? 0.92 : CARD_SCALE_MIN,
         1
       )
 
@@ -247,7 +297,7 @@ function App() {
       window.removeEventListener('resize', updateCardScale)
       resizeObserver?.disconnect()
     }
-  }, [cardScale])
+  }, [cardScale, isMobile])
 
   const handleCopyEmail = async (e: ReactMouseEvent) => {
     e.preventDefault()
@@ -261,75 +311,87 @@ function App() {
   }
   return (
     <div
-      className="relative flex h-screen items-center justify-center overflow-hidden bg-slate-950 px-6 py-12 text-slate-100"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}>
-      <motion.div
-        aria-hidden
-        className="absolute -left-24 top-[-8rem] h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl"
-        animate={{
-          x: [0, 30, -20, 0],
-          y: [0, 20, -10, 0],
-          scale: [1, 1.05, 0.95, 1],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: 'easeInOut' as const,
-        }}
-      />
-      <motion.div
-        aria-hidden
-        className="absolute bottom-[-12rem] right-[-6rem] h-[28rem] w-[28rem] rounded-full bg-fuchsia-500/20 blur-3xl"
-        animate={{
-          x: [0, -40, 10, 0],
-          y: [0, -10, 25, 0],
-          scale: [1, 0.92, 1.04, 1],
-        }}
-        transition={{
-          duration: 22,
-          repeat: Infinity,
-          ease: 'easeInOut' as const,
-        }}
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: gradientBackground }}
-        animate={{ opacity: [0.8, 0.92, 0.8] }}
-        transition={{
-          duration: 14,
-          repeat: Infinity,
-          ease: 'easeInOut' as const,
-        }}
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 mix-blend-screen"
-        style={{ background: spectralBackground, opacity: sheenOpacity }}
-        animate={{ rotate: [0, 1.8, 0], scale: [1.01, 1.04, 1.01] }}
-        transition={{
-          duration: 16,
-          repeat: Infinity,
-          ease: 'easeInOut' as const,
-        }}
-      />
+      className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-slate-950 px-4 py-10 text-slate-100 sm:px-6 sm:py-12"
+      style={isMobile ? { background: mobileBackground } : undefined}
+      onMouseMove={isMobile ? undefined : handleMouseMove}
+      onMouseLeave={isMobile ? undefined : handleMouseLeave}>
+      {!isMobile && (
+        <>
+          <motion.div
+            aria-hidden
+            className="absolute -left-24 top-[-8rem] h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl"
+            animate={{
+              x: [0, 30, -20, 0],
+              y: [0, 20, -10, 0],
+              scale: [1, 1.05, 0.95, 1],
+            }}
+            transition={{
+              duration: 18,
+              repeat: Infinity,
+              ease: 'easeInOut' as const,
+            }}
+          />
+          <motion.div
+            aria-hidden
+            className="absolute bottom-[-12rem] right-[-6rem] h-[28rem] w-[28rem] rounded-full bg-fuchsia-500/20 blur-3xl"
+            animate={{
+              x: [0, -40, 10, 0],
+              y: [0, -10, 25, 0],
+              scale: [1, 0.92, 1.04, 1],
+            }}
+            transition={{
+              duration: 22,
+              repeat: Infinity,
+              ease: 'easeInOut' as const,
+            }}
+          />
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{ background: gradientBackground }}
+            animate={{ opacity: [0.8, 0.92, 0.8] }}
+            transition={{
+              duration: 14,
+              repeat: Infinity,
+              ease: 'easeInOut' as const,
+            }}
+          />
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 mix-blend-screen"
+            style={{ background: spectralBackground, opacity: sheenOpacity }}
+            animate={{ rotate: [0, 1.8, 0], scale: [1.01, 1.04, 1.01] }}
+            transition={{
+              duration: 16,
+              repeat: Infinity,
+              ease: 'easeInOut' as const,
+            }}
+          />
+        </>
+      )}
+      {isMobile && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-95"
+          style={{ background: mobileBackground }}
+        />
+      )}
       <motion.main
         ref={cardRef}
         initial="initial"
         animate="animate"
         style={{
-          rotateX,
-          rotateY,
+          rotateX: isMobile ? 0 : rotateX,
+          rotateY: isMobile ? 0 : rotateY,
           scale: cardScale,
           transformPerspective: '1600px',
-          transformStyle: 'preserve-3d',
-          willChange: 'transform',
+          transformStyle: isMobile ? 'flat' : 'preserve-3d',
+          willChange: isMobile ? 'auto' : 'transform',
         }}
-        className="relative z-10 w-full max-w-2xl space-y-10 rounded-[2.5rem] border border-white/20 bg-gradient-to-br from-white/[0.15] via-white/[0.08] to-white/[0.12] p-12 shadow-[0_8px_32px_0_rgba(15,23,42,0.37),0_0_0_1px_rgba(255,255,255,0.18)_inset] backdrop-blur-3xl before:absolute before:inset-0 before:rounded-[2.5rem] before:bg-gradient-to-br before:from-white/[0.25] before:via-transparent before:to-transparent before:opacity-50 before:pointer-events-none">
+        className="relative z-10 w-full max-w-md space-y-8 rounded-[2rem] border border-white/20 bg-gradient-to-br from-white/[0.15] via-white/[0.08] to-white/[0.12] p-6 shadow-[0_6px_16px_0_rgba(15,23,42,0.28),0_0_0_1px_rgba(255,255,255,0.14)_inset] backdrop-blur-2xl before:pointer-events-none before:absolute before:inset-0 before:rounded-[2rem] before:bg-gradient-to-br before:from-white/[0.25] before:via-transparent before:to-transparent before:opacity-40 sm:max-w-2xl sm:space-y-10 sm:rounded-[2.5rem] sm:p-10 sm:before:rounded-[2.5rem] sm:before:opacity-50 sm:backdrop-blur-3xl md:p-12 md:shadow-[0_8px_32px_0_rgba(15,23,42,0.37),0_0_0_1px_rgba(255,255,255,0.18)_inset]">
         <motion.div
           aria-hidden
-          className="absolute inset-0 rounded-[2.5rem] opacity-30"
+          className="absolute inset-0 rounded-[2rem] opacity-30 sm:rounded-[2.5rem]"
           animate={{
             background: [
               'radial-gradient(circle at 20% 30%, rgba(94, 234, 212, 0.4) 0%, transparent 50%)',
@@ -346,8 +408,12 @@ function App() {
         />
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[2.5rem] mix-blend-screen"
-          style={{ background: cardSheen, opacity: cardSheenOpacity }}
+          className="pointer-events-none absolute inset-0 rounded-[2rem] sm:rounded-[2.5rem]"
+          style={{
+            background: cardSheen,
+            opacity: isMobile ? 0.28 : cardSheenOpacity,
+            mixBlendMode: isMobile ? 'normal' : 'screen',
+          }}
         />
         <motion.span
           variants={badgeVariants}
