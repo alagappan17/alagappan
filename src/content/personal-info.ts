@@ -10,7 +10,7 @@ export const personalInfo = {
   name: 'Alagappan N',
   bio: "Hey, I'm a Software Engineer with a foundation rooted in early curiosity for computers and how things work. Over time, I found programming to be the right blend of my creative and logical personas.",
   badge: {
-    text: "Works on my machine'",
+    text: 'Works on my machine',
     status: 'active' as const,
   },
   location: {

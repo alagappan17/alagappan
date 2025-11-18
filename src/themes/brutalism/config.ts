@@ -3,7 +3,7 @@ import { BrutalismBackground } from './Background'
 
 export const brutalismTheme: ThemeConfig = {
   id: 'brutalism',
-  name: 'Brutalism',
+  name: 'Neo Brutalism',
   colors: {
     background: '#FCEE4B',
     text: '#111',

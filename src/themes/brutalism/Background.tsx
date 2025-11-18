@@ -87,7 +87,7 @@ export function BrutalismBackground({ isMobile }: BrutalismBackgroundProps) {
                 width: '85px',
                 height: '85px',
                 clipPath: 'polygon(50% 0%, 100% 90%, 0% 90%)',
-                background: 'repeating-linear-gradient(90deg, #FCEE4B 0px, #FCEE4B 12px, #FFE8A8 12px, #FFE8A8 24px)',
+                background: 'repeating-linear-gradient(90deg, #FF8C42 0px, #FF8C42 12px, #FFA366 12px, #FFA366 24px)',
               }}
             />
           </motion.div>
@@ -274,7 +274,7 @@ export function BrutalismBackground({ isMobile }: BrutalismBackgroundProps) {
               height: isMobile ? '110px' : 'min(18vw, 10rem)',
               clipPath: 'polygon(50% 0%, 100% 90%, 0% 90%)',
               background:
-                'repeating-linear-gradient(90deg, #FCEE4B 0px, #FCEE4B 16px, #FFE8A8 16px, #FFE8A8 32px)',
+                'repeating-linear-gradient(90deg, #FF8C42 0px, #FF8C42 16px, #FFA366 16px, #FFA366 32px)',
             }}
           />
         </motion.div>

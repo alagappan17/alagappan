@@ -12,10 +12,7 @@ export function LocationFooter({ city, country, theme }: LocationFooterProps) {
     if (theme.id === 'brutalism') {
       return 'bg-[#FFDF6B]/40 sm:rounded-3xl'
     }
-    if (theme.id === 'minimalism') {
-      return 'bg-neutral-100'
-    }
-    return 'bg-gradient-to-br from-cyan-500/10 via-transparent to-fuchsia-500/10'
+    return 'bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10'
   }
 
   return (
@@ -35,9 +32,7 @@ export function LocationFooter({ city, country, theme }: LocationFooterProps) {
           className={
             theme.id === 'brutalism'
               ? 'h-4 w-4 text-[#111] sm:h-6 sm:w-6'
-              : theme.id === 'minimalism'
-                ? 'h-4 w-4 text-black sm:h-5 sm:w-5'
-                : 'h-4 w-4 text-cyan-300 sm:h-5 sm:w-5'
+              : 'h-4 w-4 text-blue-600 sm:h-5 sm:w-5'
           }>
           <path
             fillRule="evenodd"

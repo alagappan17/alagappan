@@ -82,12 +82,6 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
           'repeating-linear-gradient(135deg, #FCEE4B 0px, #FCEE4B 120px, #FFF5CC 120px, #FFF5CC 122px)',
       }
     }
-    if (theme.id === 'minimalism') {
-      return { ...baseStyle, background: theme.mobileConfig.background }
-    }
-    if (theme.id === 'terminal') {
-      return { ...baseStyle, background: theme.mobileConfig.background }
-    }
     // liquid glass
     return isMobile
       ? { ...baseStyle, background: theme.mobileConfig.background }
@@ -97,11 +91,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
   const containerClasses =
     theme.id === 'brutalism'
       ? 'relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden px-4 py-20 text-[#111] sm:px-6 sm:py-24 md:py-8'
-      : theme.id === 'minimalism'
-      ? 'relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-[#0A0A0A] px-4 py-20 sm:px-6 sm:py-24 md:py-12'
-      : theme.id === 'terminal'
-      ? 'relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-black px-4 py-20 text-[#00FF41] font-mono sm:px-6 sm:py-24 md:py-12'
-      : 'relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-slate-950 px-4 py-20 text-slate-100 sm:px-6 sm:py-24 md:py-12'
+      : 'relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-[#F5F5FA] px-4 py-20 text-slate-900 sm:px-6 sm:py-24 md:py-12'
 
   return (
     <div className={containerClasses} style={getContainerStyle()}>

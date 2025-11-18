@@ -4,7 +4,12 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion'
-import { useEffect, useRef, type ReactNode, type MouseEvent as ReactMouseEvent } from 'react'
+import {
+  useEffect,
+  useRef,
+  type ReactNode,
+  type MouseEvent as ReactMouseEvent,
+} from 'react'
 import { type ThemeConfig } from '../themes/types'
 
 interface ProfileCardProps {
@@ -40,8 +45,8 @@ export function ProfileCard({
   const pointerSpeed = useSpring(0, { stiffness: 120, damping: 24 })
 
   const cardSheen = useMotionTemplate`
-    radial-gradient(90% 90% at ${cardGlareX}% ${cardGlareY}%, rgba(255, 255, 255, 0.22), transparent 70%),
-    radial-gradient(140% 140% at ${cardGlareY}% ${cardGlareX}%, rgba(103, 232, 249, 0.1), transparent 80%)
+    radial-gradient(90% 90% at ${cardGlareX}% ${cardGlareY}%, rgba(255, 255, 255, 0.25), transparent 70%),
+    radial-gradient(140% 140% at ${cardGlareY}% ${cardGlareX}%, rgba(0, 122, 255, 0.05), transparent 80%)
   `
 
   const brutalismSheen = useMotionTemplate`
@@ -55,7 +60,7 @@ export function ProfileCard({
     )
   `
 
-  const cardSheenOpacity = useTransform(pointerSpeed, [0, 1], [0.18, 0.45])
+  const cardSheenOpacity = useTransform(pointerSpeed, [0, 1], [0.15, 0.35])
   const brutalismSheenOpacity = useTransform(pointerSpeed, [0, 1], [0.2, 0.42])
 
   useEffect(() => {
@@ -73,7 +78,10 @@ export function ProfileCard({
         window.innerHeight - verticalPadding,
         320
       )
-      const availableWidth = Math.max(window.innerWidth - horizontalPadding, 320)
+      const availableWidth = Math.max(
+        window.innerWidth - horizontalPadding,
+        320
+      )
 
       const heightScale = availableHeight / naturalHeight
       const widthScale = availableWidth / naturalWidth
@@ -178,7 +186,9 @@ export function ProfileCard({
       {theme.cardStyles.gradientAnimation && (
         <motion.div
           aria-hidden
-          className={`absolute inset-0 ${theme.cardStyles.gradientAnimation.borderRadius || ''}`}
+          className={`absolute inset-0 ${
+            theme.cardStyles.gradientAnimation.borderRadius || ''
+          }`}
           animate={{
             background: theme.cardStyles.gradientAnimation.gradients,
           }}
@@ -192,19 +202,23 @@ export function ProfileCard({
       {theme.interactionConfig.enableGlareEffect && (
         <motion.div
           aria-hidden
-          className={`pointer-events-none absolute inset-0 ${theme.id === 'brutalism' ? 'rounded-[1.5rem] sm:rounded-[2.5rem]' : 'rounded-[1.75rem] sm:rounded-[2rem] md:rounded-[2.5rem]'}`}
+          className={`pointer-events-none absolute inset-0 ${
+            theme.id === 'brutalism'
+              ? 'rounded-[1.5rem] sm:rounded-[2.5rem]'
+              : 'rounded-[1.75rem] sm:rounded-[2rem] md:rounded-[2.5rem]'
+          }`}
           style={{
             background: theme.id === 'brutalism' ? brutalismSheen : cardSheen,
             opacity: isMobile
-              ? 0.24
+              ? 0.15
               : theme.id === 'brutalism'
-                ? brutalismSheenOpacity
-                : cardSheenOpacity,
+              ? brutalismSheenOpacity
+              : cardSheenOpacity,
             mixBlendMode: isMobile
               ? 'normal'
               : theme.id === 'brutalism'
-                ? 'multiply'
-                : 'screen',
+              ? 'multiply'
+              : 'screen',
           }}
         />
       )}
@@ -212,4 +226,3 @@ export function ProfileCard({
     </motion.main>
   )
 }
-

@@ -5,12 +5,12 @@ export const liquidGlassTheme: ThemeConfig = {
   id: 'liquidGlass',
   name: 'Liquid Glass',
   colors: {
-    background: 'rgba(15, 23, 42, 1)',
-    text: 'rgba(241, 245, 249, 1)',
-    cardBackground: 'rgba(255, 255, 255, 0.1)',
-    cardBorder: 'rgba(255, 255, 255, 0.2)',
-    accentPrimary: 'rgba(103, 232, 249, 1)',
-    accentSecondary: 'rgba(244, 114, 182, 1)',
+    background: 'rgba(245, 245, 250, 1)',
+    text: 'rgba(30, 30, 40, 1)',
+    cardBackground: 'rgba(255, 255, 255, 0.7)',
+    cardBorder: 'rgba(255, 255, 255, 0.8)',
+    accentPrimary: 'rgba(0, 122, 255, 1)',
+    accentSecondary: 'rgba(175, 82, 222, 1)',
   },
   fonts: {
     heading: '"Inter", -apple-system, sans-serif',
@@ -18,55 +18,55 @@ export const liquidGlassTheme: ThemeConfig = {
   },
   cardStyles: {
     containerClassName:
-      'relative z-10 w-full max-w-md space-y-4 rounded-[1.75rem] border border-white/20 bg-gradient-to-br from-white/[0.15] via-white/[0.08] to-white/[0.12] p-5 shadow-[0_4px_12px_0_rgba(15,23,42,0.28),0_0_0_1px_rgba(255,255,255,0.14)_inset] backdrop-blur-2xl before:pointer-events-none before:absolute before:inset-0 before:rounded-[1.75rem] before:bg-gradient-to-br before:from-white/[0.25] before:via-transparent before:to-transparent before:opacity-40 sm:max-w-2xl sm:space-y-8 sm:rounded-[2rem] sm:p-8 sm:before:rounded-[2rem] sm:before:opacity-50 sm:backdrop-blur-3xl md:space-y-10 md:rounded-[2.5rem] md:p-10 md:shadow-[0_8px_32px_0_rgba(15,23,42,0.37),0_0_0_1px_rgba(255,255,255,0.18)_inset] md:before:rounded-[2.5rem]',
-    borderClassName: 'border border-white/20',
+      'relative z-10 w-full max-w-md space-y-4 rounded-[2rem] border border-white/10 bg-transparent p-5 shadow-[0_8px_32px_0_rgba(0,0,0,0.15),0_0_0_1px_rgba(255,255,255,0.1)_inset] backdrop-blur-[24px] before:pointer-events-none before:absolute before:inset-0 before:rounded-[2rem] before:bg-gradient-to-br before:from-white/5 before:via-transparent before:to-transparent before:opacity-20 sm:max-w-2xl sm:space-y-8 sm:rounded-[2.5rem] sm:p-8 sm:before:rounded-[2.5rem] sm:backdrop-blur-[28px] md:space-y-10 md:rounded-[3rem] md:p-10 md:shadow-[0_20px_60px_0_rgba(0,0,0,0.2),0_0_0_1px_rgba(255,255,255,0.15)_inset] md:before:rounded-[3rem] md:backdrop-blur-[32px]',
+    borderClassName: 'border border-white/10',
     shadowClassName:
-      'shadow-[0_4px_12px_0_rgba(15,23,42,0.28),0_0_0_1px_rgba(255,255,255,0.14)_inset] md:shadow-[0_8px_32px_0_rgba(15,23,42,0.37),0_0_0_1px_rgba(255,255,255,0.18)_inset]',
+      'shadow-[0_8px_32px_0_rgba(0,0,0,0.15),0_0_0_1px_rgba(255,255,255,0.1)_inset] md:shadow-[0_20px_60px_0_rgba(0,0,0,0.2),0_0_0_1px_rgba(255,255,255,0.15)_inset]',
     backgroundClassName:
-      'bg-gradient-to-br from-white/[0.15] via-white/[0.08] to-white/[0.12] backdrop-blur-2xl sm:backdrop-blur-3xl',
+      'bg-transparent backdrop-blur-[24px] sm:backdrop-blur-[28px] md:backdrop-blur-[32px]',
     gradientAnimation: {
       gradients: [
-        'radial-gradient(circle at 20% 30%, rgba(94, 234, 212, 0.4) 0%, transparent 50%)',
-        'radial-gradient(circle at 80% 70%, rgba(244, 114, 182, 0.4) 0%, transparent 50%)',
-        'radial-gradient(circle at 40% 80%, rgba(147, 197, 253, 0.4) 0%, transparent 50%)',
-        'radial-gradient(circle at 20% 30%, rgba(94, 234, 212, 0.4) 0%, transparent 50%)',
+        'radial-gradient(circle at 20% 30%, rgba(0, 122, 255, 0.08) 0%, transparent 60%)',
+        'radial-gradient(circle at 80% 70%, rgba(175, 82, 222, 0.06) 0%, transparent 60%)',
+        'radial-gradient(circle at 50% 50%, rgba(52, 199, 89, 0.05) 0%, transparent 60%)',
+        'radial-gradient(circle at 20% 30%, rgba(0, 122, 255, 0.08) 0%, transparent 60%)',
       ],
-      duration: 14,
-      borderRadius: 'rounded-[1.75rem] sm:rounded-[2rem] md:rounded-[2.5rem]',
+      duration: 20,
+      borderRadius: 'rounded-[2rem] sm:rounded-[2.5rem] md:rounded-[3rem]',
     },
   },
   badgeStyles: {
     containerClassName:
-      'relative z-10 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-[0.6rem] font-medium uppercase tracking-[0.18em] text-slate-200 sm:gap-2 sm:px-5 sm:py-2 sm:text-xs sm:tracking-[0.35em]',
-    dotClassName: 'h-1.5 w-1.5 rounded-full bg-cyan-300 drop-shadow-glow sm:h-2 sm:w-2',
+      'relative z-10 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/8 px-3 py-1.5 text-[0.6rem] font-medium uppercase tracking-[0.18em] text-slate-800 backdrop-blur-[20px] shadow-[0_2px_8px_0_rgba(0,0,0,0.1),0_0_0_0.5px_rgba(255,255,255,0.2)_inset] sm:gap-2 sm:px-5 sm:py-2 sm:text-xs sm:tracking-[0.35em]',
+    dotClassName: 'h-1.5 w-1.5 rounded-full bg-blue-500 sm:h-2 sm:w-2',
   },
   headingStyles: {
     titleClassName:
-      'text-[1.875rem] font-semibold leading-[1.05] sm:text-4xl md:text-5xl lg:text-6xl',
+      'text-[1.875rem] font-semibold leading-[1.05] text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl',
     bioClassName:
-      'max-w-xl text-[0.875rem] leading-[1.55] text-slate-300 sm:text-base md:text-xl',
+      'max-w-xl text-[0.875rem] leading-[1.55] text-slate-600 sm:text-base md:text-xl',
   },
   linkStyles: {
     containerClassName:
-      'group relative flex flex-col gap-0.5 overflow-hidden rounded-lg border border-white/10 bg-white/5 px-3 py-2 transition-all duration-500 hover:border-white/30 hover:bg-white/10 sm:rounded-xl sm:px-4 sm:py-3',
-    labelClassName: 'text-[0.875rem] font-semibold sm:text-base',
-    captionClassName: 'text-[0.65rem] leading-[1.2] text-slate-300/70 sm:text-xs',
+      'group relative flex flex-col gap-0.5 overflow-hidden rounded-xl border border-white/15 bg-white/8 px-3 py-2 transition-all duration-300 hover:border-white/20 hover:bg-white/12 hover:shadow-[0_4px_16px_0_rgba(0,0,0,0.15),0_0_0_0.5px_rgba(255,255,255,0.3)_inset] sm:rounded-2xl sm:px-4 sm:py-3 backdrop-blur-[20px] shadow-[0_2px_8px_0_rgba(0,0,0,0.1),0_0_0_0.5px_rgba(255,255,255,0.2)_inset]',
+    labelClassName: 'text-[0.875rem] font-semibold text-slate-800 sm:text-base',
+    captionClassName: 'text-[0.65rem] leading-[1.2] text-slate-500 sm:text-xs',
     iconContainerClassName:
-      'flex h-6 w-6 items-center justify-center rounded-full border border-white/20 bg-white/10 sm:h-7 sm:w-7',
-    hoverEffect: 'border-white/30 bg-white/10',
+      'flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-white/8 sm:h-7 sm:w-7 backdrop-blur-[16px] shadow-[0_1px_4px_0_rgba(0,0,0,0.08),0_0_0_0.5px_rgba(255,255,255,0.2)_inset]',
+    hoverEffect: 'border-white/20 bg-white/12 shadow-[0_4px_16px_0_rgba(0,0,0,0.15),0_0_0_0.5px_rgba(255,255,255,0.3)_inset]',
   },
   locationStyles: {
     containerClassName:
-      'relative z-10 flex items-center gap-1.5 text-[0.65rem] text-slate-400 sm:gap-3 sm:text-sm',
+      'relative z-10 flex items-center gap-1.5 text-[0.65rem] text-slate-600 sm:gap-3 sm:text-sm',
     iconContainerClassName:
-      'relative flex h-7 w-7 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/5 sm:h-10 sm:w-10 sm:rounded-2xl',
-    textClassName: 'text-[0.75rem] leading-[1.2] sm:text-sm',
+      'relative flex h-7 w-7 items-center justify-center overflow-hidden rounded-xl border border-white/15 bg-white/8 sm:h-10 sm:w-10 sm:rounded-2xl backdrop-blur-[20px] shadow-[0_2px_8px_0_rgba(0,0,0,0.1),0_0_0_0.5px_rgba(255,255,255,0.2)_inset]',
+    textClassName: 'text-[0.75rem] leading-[1.2] text-slate-700 sm:text-sm',
   },
   projectLinkStyles: {
     linkClassName:
-      'text-cyan-300 transition-colors hover:text-cyan-100',
+      'text-blue-600 transition-colors hover:text-blue-700',
     textClassName:
-      'max-w-xl text-[0.875rem] leading-[1.55] text-slate-300 sm:text-base md:text-xl',
+      'max-w-xl text-[0.875rem] leading-[1.55] text-slate-600 sm:text-base md:text-xl',
   },
   animations: {
     badge: {
@@ -120,7 +120,7 @@ export const liquidGlassTheme: ThemeConfig = {
   },
   mobileConfig: {
     background:
-      'radial-gradient(140% 140% at 20% 20%, rgba(56, 189, 248, 0.28), transparent 65%), radial-gradient(170% 170% at 80% 60%, rgba(244, 114, 182, 0.24), transparent 70%), linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 64, 175, 0.4))',
+      'linear-gradient(135deg, rgba(245, 245, 250, 1) 0%, rgba(235, 238, 250, 1) 50%, rgba(250, 245, 255, 1) 100%), radial-gradient(circle at 20% 30%, rgba(0, 122, 255, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(175, 82, 222, 0.06) 0%, transparent 50%)',
     disableAnimations: false,
   },
   BackgroundComponent: LiquidGlassBackground,
