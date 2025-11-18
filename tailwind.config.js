@@ -6,6 +6,7 @@ export default {
       fontFamily: {
         display: ['"Space Grotesk"', 'sans-serif'],
         body: ['"Inter"', 'sans-serif'],
+        mono: ['"Courier New"', '"Courier"', 'Monaco', 'Menlo', 'Consolas', 'monospace'],
       },
       keyframes: {
         blob: {
