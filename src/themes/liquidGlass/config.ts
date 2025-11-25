@@ -68,6 +68,21 @@ export const liquidGlassTheme: ThemeConfig = {
     textClassName:
       'max-w-xl text-[0.875rem] leading-[1.55] text-slate-600 sm:text-base md:text-xl',
   },
+  introductionStyles: {
+    containerClassName: 'relative z-10 space-y-3 sm:space-y-4',
+    paragraphClassName:
+      'max-w-xl text-[0.875rem] leading-[1.6] text-slate-600 sm:text-base sm:leading-[1.65] md:text-lg md:leading-[1.7]',
+  },
+  techStackStyles: {
+    containerClassName:
+      'relative z-10 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-4',
+    cardClassName:
+      'group flex flex-col items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/8 p-3 transition-all duration-300 hover:border-white/25 hover:bg-white/12 hover:shadow-[0_4px_16px_0_rgba(0,0,0,0.15),0_0_0_0.5px_rgba(255,255,255,0.3)_inset] sm:rounded-2xl sm:gap-2 sm:p-4 backdrop-blur-[20px] shadow-[0_2px_8px_0_rgba(0,0,0,0.1),0_0_0_0.5px_rgba(255,255,255,0.2)_inset]',
+    logoClassName: 'h-6 w-6 sm:h-8 sm:w-8',
+    nameClassName:
+      'text-[0.65rem] font-medium text-slate-700 sm:text-xs',
+    hoverEffect: 'border-white/25 bg-white/12 shadow-[0_4px_16px_0_rgba(0,0,0,0.15),0_0_0_0.5px_rgba(255,255,255,0.3)_inset]',
+  },
   animations: {
     badge: {
       initial: { opacity: 0, y: 16 },

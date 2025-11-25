@@ -14,11 +14,26 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  html {
+    @apply overflow-x-hidden;
+  }
+
   body {
-    @apply m-0 min-h-screen bg-slate-950 text-slate-100 antialiased;
+    @apply m-0 min-h-screen bg-slate-950 text-slate-100 antialiased overflow-x-hidden;
   }
 
   * {
     @apply selection:bg-cyan-500/60 selection:text-white;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

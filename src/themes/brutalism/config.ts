@@ -68,6 +68,21 @@ export const brutalismTheme: ThemeConfig = {
     textClassName:
       'max-w-xl text-[0.875rem] leading-[1.55] text-[#222] sm:text-base md:text-xl',
   },
+  introductionStyles: {
+    containerClassName: 'relative z-10 space-y-3 sm:space-y-4',
+    paragraphClassName:
+      'max-w-xl text-[0.875rem] leading-[1.6] text-[#222] sm:text-base sm:leading-[1.65] md:text-lg md:leading-[1.7]',
+  },
+  techStackStyles: {
+    containerClassName:
+      'relative z-10 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-4',
+    cardClassName:
+      'group flex flex-col items-center justify-center gap-1.5 rounded-lg border-[2.5px] border-black bg-white p-3 transition-all hover:shadow-[4px_4px_0_0_#111] sm:rounded-xl sm:border-[3px] sm:gap-2 sm:p-4 sm:hover:shadow-[6px_6px_0_0_#111]',
+    logoClassName: 'h-6 w-6 sm:h-8 sm:w-8',
+    nameClassName:
+      'text-[0.65rem] font-black uppercase tracking-wide text-[#111] sm:text-xs',
+    hoverEffect: 'shadow-[4px_4px_0_0_#111] sm:shadow-[6px_6px_0_0_#111]',
+  },
   animations: {
     badge: {
       initial: { opacity: 0, y: 16 },

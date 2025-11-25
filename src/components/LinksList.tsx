@@ -97,12 +97,22 @@ export function LinksList({
             href={link.href}
             target={link.href.startsWith('http') ? '_blank' : undefined}
             rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
-            className={theme.linkStyles.containerClassName}
+            className={`${theme.linkStyles.containerClassName} relative overflow-hidden`}
             style={getLinkStyle(link)}
             whileHover={getHoverAnimation(link)}
             whileTap={getTapAnimation()}
             transition={getTransition()}>
-            <div className="flex items-center justify-between">
+            {/* Pattern overlay for brutalism theme - diagonal lines */}
+            {theme.id === 'brutalism' && (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 opacity-15"
+                style={{
+                  backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(17, 17, 17, 0.1) 4px, rgba(17, 17, 17, 0.1) 8px)',
+                }}
+              />
+            )}
+            <div className="relative z-10 flex items-center justify-between">
               <span className={theme.linkStyles.labelClassName}>
                 {link.label}
               </span>
@@ -188,7 +198,7 @@ export function LinksList({
                 </motion.span>
               </div>
             </div>
-            <p className={theme.linkStyles.captionClassName}>{link.caption}</p>
+            <p className={`${theme.linkStyles.captionClassName} relative z-10`}>{link.caption}</p>
 
             {theme.id === 'brutalism' ? (
               <motion.span

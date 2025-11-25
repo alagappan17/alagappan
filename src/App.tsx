@@ -10,8 +10,10 @@ import {
   trackEngagementTime,
   trackUserInactive,
 } from './utils/analytics'
+import { SectionSelector } from './components/SectionSelector'
 
 type ThemeId = 'brutalism' | 'liquidGlass'
+type SectionId = 'home' | 'about' | 'journey' | 'artworks' | 'connect'
 
 const themes: Record<ThemeId, ThemeConfig> = {
   brutalism: brutalismTheme,
@@ -22,6 +24,7 @@ function App() {
   const [themeId, setThemeId] = useState<ThemeId>('brutalism')
   const [tooltipTheme, setTooltipTheme] = useState<ThemeId | null>(null)
   const [hoveredTheme, setHoveredTheme] = useState<ThemeId | null>(null)
+  const [activeSection, setActiveSection] = useState<SectionId>('home')
   const hideTooltipTimeout = useRef<number | null>(null)
   const previousThemeRef = useRef<ThemeId>('brutalism')
   const scrollTrackedRef = useRef<Set<number>>(new Set())
@@ -141,6 +144,65 @@ function App() {
     }
   }, [])
 
+  // Track active section based on scroll position
+  useEffect(() => {
+    const sections: SectionId[] = ['home', 'about', 'journey', 'artworks', 'connect']
+    const intersectingEntries = new Map<string, IntersectionObserverEntry>()
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const sectionId = entry.target.id.replace('section-', '')
+          if (entry.isIntersecting) {
+            intersectingEntries.set(sectionId, entry)
+          } else {
+            intersectingEntries.delete(sectionId)
+          }
+        })
+
+        // Find the most visible section (highest intersection ratio)
+        let mostVisibleSection: SectionId | null = null
+        let maxRatio = 0
+
+        intersectingEntries.forEach((entry, sectionId) => {
+          if (entry.intersectionRatio > maxRatio) {
+            maxRatio = entry.intersectionRatio
+            mostVisibleSection = sectionId as SectionId
+          }
+        })
+
+        if (mostVisibleSection) {
+          setActiveSection(mostVisibleSection)
+        }
+      },
+      {
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+        rootMargin: '-10% 0px -10% 0px',
+      }
+    )
+
+    // Wait a bit for DOM to be ready
+    setTimeout(() => {
+      sections.forEach((sectionId) => {
+        const element = document.getElementById(`section-${sectionId}`)
+        if (element) {
+          observer.observe(element)
+        }
+      })
+    }, 100)
+
+    return () => {
+      intersectingEntries.clear()
+      sections.forEach((sectionId) => {
+        const element = document.getElementById(`section-${sectionId}`)
+        if (element) {
+          observer.unobserve(element)
+        }
+      })
+      observer.disconnect()
+    }
+  }, [])
+
   const showMobileTooltip = (nextTheme: ThemeId) => {
     if (typeof window === 'undefined') return
 
@@ -175,7 +237,7 @@ function App() {
   }
 
   const hoverLabelBaseClasses =
-    'pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 translate-y-2 whitespace-nowrap origin-bottom opacity-0 scale-95 mix-blend-normal transition-all duration-200 ease-out md:bottom-auto md:left-full md:top-1/2 md:mb-0 md:ml-4 md:-translate-y-1/2 md:translate-x-3 md:origin-left md:opacity-0 md:scale-95 md:group-hover:opacity-100 md:group-hover:translate-x-0 md:group-hover:scale-100'
+    'pointer-events-none absolute top-full left-1/2 z-10 mt-2 -translate-x-1/2 -translate-y-2 whitespace-nowrap origin-top opacity-0 scale-95 mix-blend-normal transition-all duration-200 ease-out md:bottom-auto md:left-full md:top-1/2 md:mt-0 md:mb-0 md:ml-4 md:-translate-y-1/2 md:translate-x-3 md:origin-left md:opacity-0 md:scale-95 md:group-hover:opacity-100 md:group-hover:translate-x-0 md:group-hover:scale-100'
   const hoverLabelThemeStyles: Record<ThemeId, string> = {
     brutalism:
       'rounded-xl border-[3px] border-black bg-[#FCEE4B] px-3 py-1 text-[0.7rem] font-black uppercase tracking-[0.22em] text-[#111] shadow-[4px_4px_0_0_#111] md:px-4 md:py-1.5 md:text-xs',
@@ -187,11 +249,14 @@ function App() {
   const activeLabelTheme = hoveredTheme || themeId
 
   return (
-    <div className="relative min-h-[100dvh] w-full overflow-hidden">
+    <div className="relative w-full overflow-x-hidden">
+      {/* Section Selector */}
+      <SectionSelector themeId={themeId} activeSection={activeSection} />
+
       {/* Theme Picker */}
-      <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center md:bottom-auto md:left-6 md:right-auto md:top-1/2 md:justify-start md:-translate-y-1/2">
+      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center md:bottom-auto md:left-6 md:right-auto md:top-1/2 md:justify-start md:-translate-y-1/2">
         <motion.div
-          initial={{ y: 50, opacity: 0 }}
+          initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
           className={`flex items-center gap-2.5 md:flex-col md:gap-3 ${
@@ -220,7 +285,7 @@ function App() {
                 hoverLabelThemeStyles[activeLabelTheme]
               } ${
                 tooltipTheme === 'brutalism'
-                  ? 'opacity-100 translate-y-0 scale-100'
+                  ? 'opacity-100 -translate-y-0 scale-100'
                   : ''
               }`}>
               Neo Brutalism
@@ -234,7 +299,8 @@ function App() {
             )}
           </motion.button>
 
-          <motion.button
+          {/* Liquid Glass theme - commented out temporarily */}
+          {/* <motion.button
             onClick={() => handleThemeClick('liquidGlass')}
             onMouseEnter={() => setHoveredTheme('liquidGlass')}
             onMouseLeave={() => setHoveredTheme(null)}
@@ -257,7 +323,7 @@ function App() {
                 hoverLabelThemeStyles[activeLabelTheme]
               } ${
                 tooltipTheme === 'liquidGlass'
-                  ? 'opacity-100 translate-y-0 scale-100'
+                  ? 'opacity-100 -translate-y-0 scale-100'
                   : ''
               }`}>
               Liquid Glass
@@ -269,7 +335,7 @@ function App() {
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               />
             )}
-          </motion.button>
+          </motion.button> */}
         </motion.div>
       </div>
 

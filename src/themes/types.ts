@@ -65,6 +65,19 @@ export interface ProjectLinkStyles {
   textClassName: string
 }
 
+export interface IntroductionStyles {
+  paragraphClassName: string
+  containerClassName: string
+}
+
+export interface TechStackStyles {
+  containerClassName: string
+  cardClassName: string
+  logoClassName: string
+  nameClassName: string
+  hoverEffect: string
+}
+
 export interface ThemeAnimations {
   badge: AnimationVariant
   heading: AnimationVariant
@@ -97,8 +110,10 @@ export interface ThemeConfig {
   linkStyles: LinkStyles
   locationStyles: LocationStyles
   projectLinkStyles: ProjectLinkStyles
+  introductionStyles: IntroductionStyles
+  techStackStyles: TechStackStyles
   animations: ThemeAnimations
   interactionConfig: InteractionConfig
   mobileConfig: MobileConfig
-  BackgroundComponent: ComponentType<{ isMobile: boolean }>
+  BackgroundComponent: ComponentType<{ isMobile: boolean; scrollProgress?: any }>
 }

@@ -222,6 +222,17 @@ export function ProfileCard({
           }}
         />
       )}
+      {/* Grey dots pattern overlay for brutalism theme */}
+      {theme.id === 'brutalism' && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-[1.5rem] sm:rounded-[2.5rem] opacity-20"
+          style={{
+            backgroundImage: 'radial-gradient(circle, #999 1.5px, transparent 1.5px)',
+            backgroundSize: '16px 16px',
+          }}
+        />
+      )}
       {children}
     </motion.main>
   )
