@@ -7,14 +7,19 @@ import {
   useAnimations,
 } from '@react-three/drei'
 import * as THREE from 'three'
+import { useSpotifyPlaying } from '../hooks/useSpotifyPlaying'
 
 interface ThreeObjectProps {
   themeId: 'brutalism' | 'liquidGlass'
 }
 
-function RotatingObject() {
+interface RotatingObjectProps {
+  modelPath: string
+}
+
+function RotatingObject({ modelPath }: RotatingObjectProps) {
   const groupRef = useRef<THREE.Group>(null)
-  const { scene, animations } = useGLTF('/model_animated.glb')
+  const { scene, animations } = useGLTF(modelPath)
   const { actions, mixer } = useAnimations(animations, groupRef)
 
   // Set up clipping plane to show more of the model
@@ -51,6 +56,7 @@ function RotatingObject() {
       Object.values(actions).forEach((action) => {
         if (action) {
           action.setLoop(THREE.LoopRepeat, Infinity)
+          action.timeScale = 0.5 // Slow down animation to 50% speed
           action.play()
         }
       })
@@ -297,6 +303,13 @@ function BrutalistBackground() {
 }
 
 export function ThreeObject({ themeId }: ThreeObjectProps) {
+  // Check if music is playing to determine which model to use
+  const isMusicPlaying = useSpotifyPlaying()
+  // Use model_animated_2.glb when music is playing, model_animated_3.glb by default
+  const modelPath = isMusicPlaying
+    ? '/model_animated_2.glb'
+    : '/model_animated_3.glb'
+
   return (
     <div className="relative h-full w-full rounded-[1.5rem] border-[3px] border-black bg-white shadow-[8px_8px_0_0_#111] sm:rounded-[2.5rem] sm:border-4 sm:shadow-[18px_18px_0_0_#111] overflow-hidden">
       <Canvas
@@ -331,7 +344,8 @@ export function ThreeObject({ themeId }: ThreeObjectProps) {
           />
         )}
         {themeId === 'brutalism' && <BrutalistBackground />}
-        <RotatingObject />
+        {/* Use key prop to force re-mount when model changes for smooth switching */}
+        <RotatingObject key={modelPath} modelPath={modelPath} />
         <OrbitControls
           enableZoom={false}
           enablePan={false}
@@ -340,7 +354,7 @@ export function ThreeObject({ themeId }: ThreeObjectProps) {
           maxPolarAngle={Math.PI / 2}
         />
       </Canvas>
-      
+
       {/* Label - yellow badge, positioned at bottom right */}
       {themeId === 'brutalism' && (
         <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
@@ -349,7 +363,7 @@ export function ThreeObject({ themeId }: ThreeObjectProps) {
           </div>
         </div>
       )}
-      
+
       {themeId === 'liquidGlass' && (
         <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
           <div className="inline-block rounded-md border border-white/40 bg-amber-400/30 px-1.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wider text-amber-50 backdrop-blur-sm shadow-[0_4px_16px_0_rgba(0,0,0,0.2)] sm:text-xs sm:px-2 sm:py-1">
