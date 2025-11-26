@@ -12,6 +12,7 @@ import { LinksList } from './components/LinksList'
 import { LocationFooter } from './components/LocationFooter'
 import { ArtworksSection } from './components/ArtworksSection'
 import { ConnectSection } from './components/ConnectSection'
+import { LifestyleSection } from './components/LifestyleSection'
 
 interface ThemeLayoutProps {
   theme: ThemeConfig
@@ -110,6 +111,36 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
     return baseStyle
   }
 
+  const getLifestyleScreenStyle = () => {
+    const baseStyle: React.CSSProperties = {
+      fontFamily: theme.fonts.body,
+    }
+
+    if (theme.id === 'brutalism') {
+      return {
+        ...baseStyle,
+        background: `
+          repeating-linear-gradient(90deg, 
+            #FEF3C7 0px, 
+            #FEF3C7 40px, 
+            rgba(251, 191, 36, 0.3) 40px, 
+            rgba(251, 191, 36, 0.3) 80px
+          ),
+          repeating-linear-gradient(0deg, 
+            #FEF3C7 0px, 
+            #FEF3C7 40px, 
+            rgba(251, 146, 60, 0.3) 40px, 
+            rgba(251, 146, 60, 0.3) 80px
+          ),
+          #FEF3C7
+        `,
+        backgroundSize: '80px 80px',
+      }
+    }
+    // liquid glass
+    return baseStyle
+  }
+
   const getThirdScreenStyle = () => {
     const baseStyle: React.CSSProperties = {
       fontFamily: theme.fonts.body,
@@ -181,6 +212,11 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
       : 'relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F5F5FA] px-4 pt-0 pb-20 text-slate-900 sm:px-6 sm:pt-4 sm:pb-24 md:min-h-0 md:pt-12 md:pb-16 lg:pt-16 lg:pb-20'
 
   const secondScreenClasses =
+    theme.id === 'brutalism'
+      ? 'relative min-h-screen w-full overflow-hidden px-6 py-12 text-[#111] sm:px-8 sm:py-16 md:min-h-0 md:px-12 md:py-16 lg:px-16 lg:py-20'
+      : 'relative min-h-screen w-full overflow-hidden px-6 py-12 bg-[#F5F5FA] text-slate-900 sm:px-8 sm:py-16 md:min-h-0 md:px-12 md:py-16 lg:px-16 lg:py-20'
+
+  const lifestyleScreenClasses =
     theme.id === 'brutalism'
       ? 'relative min-h-screen w-full overflow-hidden px-6 py-12 text-[#111] sm:px-8 sm:py-16 md:min-h-0 md:px-12 md:py-16 lg:px-16 lg:py-20'
       : 'relative min-h-screen w-full overflow-hidden px-6 py-12 bg-[#F5F5FA] text-slate-900 sm:px-8 sm:py-16 md:min-h-0 md:px-12 md:py-16 lg:px-16 lg:py-20'
@@ -317,6 +353,30 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
             viewport={{ once: true, margin: '-100px' }}
             variants={theme.animations.body}>
             <ArtworksSection artworks={personalInfo.artworks} theme={theme} />
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Lifestyle Screen - Life & Interests Scrapbook */}
+      <div
+        id="section-lifestyle"
+        className={lifestyleScreenClasses}
+        style={getLifestyleScreenStyle()}>
+        <theme.BackgroundComponent
+          isMobile={isMobile}
+          scrollProgress={scrollProgress}
+        />
+
+        <div className="relative z-10 mx-auto max-w-6xl">
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={theme.animations.body}>
+            <LifestyleSection
+              lifestyleItems={personalInfo.lifestyle}
+              theme={theme}
+            />
           </motion.div>
         </div>
       </div>

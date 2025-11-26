@@ -211,7 +211,7 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
             {/* Offline Text */}
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-[#999] sm:text-sm">
-                Offline
+                Offline on Spotify
               </p>
               <p className="mt-0.5 text-[0.65rem] text-[#999] sm:text-xs">
                 Not playing

@@ -13,7 +13,7 @@ import {
 import { SectionSelector } from './components/SectionSelector'
 
 type ThemeId = 'brutalism' | 'liquidGlass'
-type SectionId = 'home' | 'about' | 'journey' | 'artworks' | 'connect'
+type SectionId = 'home' | 'about' | 'lifestyle' | 'journey' | 'artworks' | 'connect'
 
 const themes: Record<ThemeId, ThemeConfig> = {
   brutalism: brutalismTheme,
@@ -146,7 +146,7 @@ function App() {
 
   // Track active section based on scroll position
   useEffect(() => {
-    const sections: SectionId[] = ['home', 'about', 'journey', 'artworks', 'connect']
+    const sections: SectionId[] = ['home', 'about', 'journey', 'artworks', 'lifestyle', 'connect']
     const intersectingEntries = new Map<string, IntersectionObserverEntry>()
 
     const observer = new IntersectionObserver(

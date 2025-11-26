@@ -70,3 +70,4 @@ export function GitHubHeatmap({ theme, username }: GitHubHeatmapProps) {
 
 
 
+

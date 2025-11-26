@@ -49,6 +49,15 @@ export interface Artwork {
   instagramUrl?: string // Instagram link to show on hover
 }
 
+export interface LifestyleItem {
+  id: string
+  url: string // Path to image
+  caption?: string
+  interest: string
+  rotation?: number // Rotation angle in degrees (-15 to 15)
+  position?: { x: number; y: number } // Position in percentage
+}
+
 export const personalInfo = {
   name: "I'm Alagappan",
   bio: 'A Software Engineer with a foundation rooted in early curiosity for computers and how things work. Over time, I found programming to be the right blend of my creative and logical personas.',
@@ -559,4 +568,111 @@ export const personalInfo = {
         'https://www.instagram.com/cloudysharks.in/reel/CwvBkpDycO6/',
     },
   ] as Artwork[],
+  lifestyle: [
+    {
+      id: 'lifestyle-2',
+      url: '/lifestyle/002.png',
+      caption: '',
+      interest: 'Open Ears Forum',
+      rotation: 8,
+    },
+    {
+      id: 'lifestyle-3',
+      url: '/lifestyle/009.jpg',
+      caption: '',
+      interest: 'Frappuccino',
+      rotation: -6,
+    },
+    {
+      id: 'lifestyle-4',
+      url: '/lifestyle/004.jpg',
+      caption: '',
+      interest: '1+ Community Meetup',
+      rotation: 6,
+    },
+    {
+      id: 'lifestyle-5',
+      url: '/lifestyle/005.jpg',
+      caption: '',
+      interest: 'Darjeeling',
+      rotation: -8,
+    },
+    {
+      id: 'lifestyle-6',
+      url: '/lifestyle/006.png',
+      caption: '',
+      interest: 'Nathula Pass',
+      rotation: 10,
+    },
+    {
+      id: 'lifestyle-7',
+      url: '/lifestyle/007.jpg',
+      caption: '',
+      interest: 'Bangkok',
+      rotation: -7,
+    },
+    {
+      id: 'lifestyle-9',
+      url: '/lifestyle/003.jpg',
+      caption: '',
+      interest: 'Ramen',
+      rotation: -12,
+    },
+    {
+      id: 'lifestyle-11',
+      url: '/lifestyle/011.jpg',
+      caption: '',
+      interest: 'Sikkim',
+      rotation: -9,
+    },
+    {
+      id: 'lifestyle-12',
+      url: '/lifestyle/019.jpg',
+      caption: '',
+      interest: 'Dawki',
+      rotation: -8,
+    },
+    {
+      id: 'lifestyle-13',
+      url: '/lifestyle/013.png',
+      caption: '',
+      interest: 'Meghalaya',
+      rotation: -4,
+    },
+    {
+      id: 'lifestyle-14',
+      url: '/lifestyle/014.jpg',
+      caption: '',
+      interest: 'Kickboxing',
+      rotation: 8,
+    },
+    {
+      id: 'lifestyle-17',
+      url: '/lifestyle/016.png',
+      caption: '',
+      interest: 'Kudremukh',
+      rotation: 7,
+    },
+    {
+      id: 'lifestyle-18',
+      url: '/lifestyle/015.png',
+      caption: '',
+      interest: 'GDG Build with AI',
+      rotation: -6,
+    },
+    {
+      id: 'lifestyle-17-img',
+      url: '/lifestyle/017.jpg',
+      caption: '',
+      interest: 'Pondicherry',
+      rotation: -5,
+    },
+    {
+      id: 'lifestyle-19',
+      url: '/lifestyle/012.jpg',
+      caption: '',
+      interest: 'Gokarna',
+      rotation: 5,
+    },
+  ] as LifestyleItem[],
 }
