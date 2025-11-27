@@ -181,13 +181,13 @@ export const personalInfo = {
           title: 'SDE2',
           period: 'Nov 2025 - Present',
           description:
-            'Building an early literacy app based on the science of reading, helping kids learn to read.',
+            'Focusing on scaling the platform, building integrations and tools for better usability, and optimizing performance.',
         },
         {
           title: 'SDE1',
           period: 'Nov 2023 - Oct 2025',
           description:
-            'Building an early literacy app based on the science of reading, helping kids learn to read.',
+            'Developed core features for Bloom from the ground up, built the MVP, and established the foundation.',
         },
         {
           title: 'Trainee',

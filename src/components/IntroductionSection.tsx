@@ -37,22 +37,37 @@ const creativeTools: TechStackItem[] = [
   { name: 'Figma', logoUrl: '/stack/Figma.png' },
 ]
 
+function highlightSkidrrow(text: string): React.ReactNode {
+  const parts = text.split(/(skidrrow)/i)
+  return parts.map((part, index) =>
+    part.toLowerCase() === 'skidrrow' ? (
+      <strong key={index}>{part}</strong>
+    ) : (
+      part
+    )
+  )
+}
+
 export function IntroductionSection({
   paragraphs,
   theme,
 }: IntroductionSectionProps) {
   const isBrutalism = theme.id === 'brutalism'
-  const [hoveredPrimaryIndex, setHoveredPrimaryIndex] = useState<number | null>(null)
+  const [hoveredPrimaryIndex, setHoveredPrimaryIndex] = useState<number | null>(
+    null
+  )
   const [hoveredToolIndex, setHoveredToolIndex] = useState<number | null>(null)
-  const [hoveredCreativeIndex, setHoveredCreativeIndex] = useState<number | null>(null)
-  
+  const [hoveredCreativeIndex, setHoveredCreativeIndex] = useState<
+    number | null
+  >(null)
+
   // Parallax scroll effects
   const sectionRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   })
-  
+
   // Multiple parallax speeds for depth effect
   const y1 = useTransform(scrollYProgress, [0, 1], [100, -100])
   const y2 = useTransform(scrollYProgress, [0, 1], [200, -200])
@@ -65,22 +80,29 @@ export function IntroductionSection({
 
   if (isBrutalism) {
     const bgColors = [
-      '#FFFFFF', '#F0F9F8', '#FFFFFF', '#F0F9F8', '#FFFFFF', '#F0F9F8',
+      '#FFFFFF',
+      '#F0F9F8',
+      '#FFFFFF',
+      '#F0F9F8',
+      '#FFFFFF',
+      '#F0F9F8',
     ]
 
     return (
-      <div ref={sectionRef} className="relative w-full space-y-4 sm:space-y-6 md:space-y-8">
+      <div
+        ref={sectionRef}
+        className="relative w-full space-y-4 sm:space-y-6 md:space-y-8">
         {/* Parallax Background Decorations - Layer 1 (Far) */}
         <motion.div
           className="pointer-events-none absolute left-[8%] top-[10%] z-0 h-20 w-20 rounded-full border-[3px] border-black bg-[#FFB6C1] shadow-[6px_6px_0_0_#111] sm:h-24 sm:w-24 md:h-28 md:w-28"
           style={{ y: y1, rotate: rotate1 }}
         />
-        
+
         <motion.div
           className="pointer-events-none absolute right-[10%] top-[15%] z-0 h-16 w-16 rotate-45 border-[3px] border-black bg-[#FCEE4B] shadow-[6px_6px_0_0_#111] sm:h-20 sm:w-20 md:h-24 md:w-24"
           style={{ y: y2, rotate: rotate2 }}
         />
-        
+
         <motion.div
           className="pointer-events-none absolute left-[15%] bottom-[20%] z-0 h-24 w-24 border-[3px] border-black bg-[#2EC4B6] shadow-[6px_6px_0_0_#111] sm:h-28 sm:w-28 md:h-32 md:w-32"
           style={{
@@ -89,12 +111,12 @@ export function IntroductionSection({
             clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
           }}
         />
-        
+
         <motion.div
           className="pointer-events-none absolute right-[12%] bottom-[25%] z-0 h-18 w-18 rounded-full border-[3px] border-black bg-[#FF8FB3] shadow-[6px_6px_0_0_#111] sm:h-22 sm:w-22 md:h-26 md:w-26"
           style={{ y: y4 }}
         />
-        
+
         {/* Parallax Background Decorations - Layer 2 (Medium) */}
         <motion.div
           className="pointer-events-none absolute left-[5%] top-[45%] z-0 h-14 w-14 border-[3px] border-black bg-[#FFA366] shadow-[4px_4px_0_0_#111] sm:h-16 sm:w-16 md:h-20 md:w-20"
@@ -103,33 +125,34 @@ export function IntroductionSection({
             clipPath: 'polygon(50% 0%, 100% 90%, 0% 90%)',
           }}
         />
-        
+
         <motion.div
           className="pointer-events-none absolute right-[8%] top-[50%] z-0 h-16 w-16 rounded-xl border-[3px] border-black bg-[#5EDCD4] shadow-[5px_5px_0_0_#111] sm:h-20 sm:w-20 md:h-24 md:w-24"
           style={{ y: y1, rotate: rotate3 }}
         />
-        
+
         <motion.div
           className="pointer-events-none absolute left-[20%] top-[70%] z-0 h-12 w-12 rotate-45 border-[3px] border-black bg-[#FCEE4B] shadow-[4px_4px_0_0_#111] sm:h-14 sm:w-14 md:h-16 md:w-16"
           style={{ y: y2 }}
         />
-        
+
         <motion.div
           className="pointer-events-none absolute right-[18%] bottom-[10%] z-0 h-20 w-20 rounded-full border-[3px] border-black bg-[#FF6F91] shadow-[5px_5px_0_0_#111] sm:h-24 sm:w-24 md:h-28 md:w-28"
           style={{ y: y3, rotate: rotate2 }}
         />
-        
+
         {/* Parallax Background Decorations - Layer 3 (Near) */}
         <motion.div
           className="pointer-events-none absolute left-[25%] top-[30%] z-0 h-10 w-10 rounded-lg border-[2.5px] border-black bg-[#2EC4B6] shadow-[3px_3px_0_0_#111] sm:h-12 sm:w-12"
           style={{ y: y4, rotate: rotate1 }}
         />
-        
+
         <motion.div
           className="pointer-events-none absolute right-[25%] top-[65%] z-0 h-14 w-14 border-[2.5px] border-black bg-[#FFB6C1] shadow-[4px_4px_0_0_#111] sm:h-16 sm:w-16"
           style={{
             y: y5,
-            clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+            clipPath:
+              'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
           }}
         />
 
@@ -155,7 +178,13 @@ export function IntroductionSection({
             initial={{ opacity: 0, scale: 0.8, rotate: 2 }}
             whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ delay: 0.1, duration: 0.6, type: 'spring', stiffness: 180, damping: 14 }}
+            transition={{
+              delay: 0.1,
+              duration: 0.6,
+              type: 'spring',
+              stiffness: 180,
+              damping: 14,
+            }}
             whileHover={{ y: -4, rotate: -1, transition: { duration: 0.2 } }}
             className="absolute left-1/2 -top-28 z-30 w-fit -translate-x-1/2 sm:left-auto sm:right-4 sm:top-4 sm:translate-x-0 md:right-8 md:top-8">
             <div className="relative rounded-2xl border-[3px] border-black bg-white p-3 shadow-[6px_6px_0_0_#111] sm:rounded-3xl sm:border-4 sm:p-4 md:p-5 -rotate-[1deg]">
@@ -181,8 +210,8 @@ export function IntroductionSection({
               ease: [0.22, 1, 0.36, 1],
             }}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            style={{ 
-              fontFamily: theme.fonts.body, 
+            style={{
+              fontFamily: theme.fonts.body,
               minHeight: '300px',
             }}
             className="relative ml-0 mr-auto max-w-4xl rounded-2xl border-[3px] border-black bg-[#2EC4B6] p-6 shadow-[6px_6px_0_0_#111] sm:rounded-3xl sm:border-4 sm:p-8 md:p-10 rotate-[0.5deg]">
@@ -191,7 +220,13 @@ export function IntroductionSection({
               initial={{ opacity: 0, scale: 0.5, rotate: -25 }}
               whileInView={{ opacity: 1, scale: 1, rotate: -12 }}
               viewport={{ once: true, margin: '-80px' }}
-              transition={{ delay: 0.2, duration: 0.6, type: 'spring', stiffness: 180, damping: 12 }}
+              transition={{
+                delay: 0.2,
+                duration: 0.6,
+                type: 'spring',
+                stiffness: 180,
+                damping: 12,
+              }}
               className="absolute -left-4 -top-3 z-30 rounded-sm border-[2.5px] border-black bg-[#FCEE4B] px-4 py-2 shadow-[4px_4px_0_0_#111,0_0_0_2px_#FCEE4B] sm:-left-5 sm:-top-4 sm:px-5 sm:py-2.5">
               <span className="text-xs font-black uppercase tracking-wider text-[#111] sm:text-sm">
                 Engineer
@@ -206,16 +241,19 @@ export function IntroductionSection({
                   'repeating-linear-gradient(45deg, #111 0px, #111 2px, transparent 2px, transparent 10px)',
               }}
             />
-            
+
+            {/* Subtle background overlay for better text readability */}
+            <div className="absolute inset-0 bg-white/20 rounded-2xl sm:rounded-3xl" />
+
             {/* Content */}
             <div className="relative z-10 space-y-6">
-              <p className="text-[0.875rem] font-medium leading-[1.7] text-white sm:text-base sm:leading-[1.75] md:text-lg md:leading-[1.8] pt-8 sm:pt-0">
+              <p className="text-[0.875rem] font-medium leading-[1.7] text-slate-900 sm:text-base sm:leading-[1.75] md:text-lg md:leading-[1.8] pt-8 sm:pt-0">
                 {paragraphs[0]}
               </p>
 
               {/* Primary Stack */}
               <div className="space-y-3">
-                <h4 className="text-xs font-black uppercase tracking-wider text-white/90 sm:text-sm">
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 sm:text-sm">
                   Primary Stack
                 </h4>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
@@ -242,7 +280,9 @@ export function IntroductionSection({
                           y: -8,
                         }}
                         whileTap={{ scale: 0.95 }}
-                        style={{ backgroundColor: bgColors[index % bgColors.length] }}
+                        style={{
+                          backgroundColor: bgColors[index % bgColors.length],
+                        }}
                         className="flex h-12 w-12 items-center justify-center rounded-xl border-[3px] border-black shadow-[4px_4px_0_0_#111] transition-shadow hover:shadow-[6px_6px_0_0_#111] sm:h-14 sm:w-14 sm:rounded-2xl">
                         <img
                           src={item.logoUrl}
@@ -261,7 +301,11 @@ export function IntroductionSection({
                           scale: hoveredPrimaryIndex === index ? 1 : 0.8,
                           rotate: hoveredPrimaryIndex === index ? -2 : 0,
                         }}
-                        transition={{ duration: 0.2, type: 'spring', stiffness: 200 }}
+                        transition={{
+                          duration: 0.2,
+                          type: 'spring',
+                          stiffness: 200,
+                        }}
                         className="pointer-events-none absolute -bottom-12 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg border-[2.5px] border-black bg-[#1A9B8E] px-3 py-1.5 text-xs font-black uppercase tracking-wider text-white shadow-[4px_4px_0_0_#111] sm:-bottom-14 sm:px-4 sm:py-2 sm:text-sm">
                         {item.name}
                       </motion.div>
@@ -272,7 +316,7 @@ export function IntroductionSection({
 
               {/* Tool Stack */}
               <div className="space-y-3">
-                <h4 className="text-xs font-black uppercase tracking-wider text-white/90 sm:text-sm">
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 sm:text-sm">
                   Tool Stack
                 </h4>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
@@ -283,7 +327,7 @@ export function IntroductionSection({
                       whileInView={{ opacity: 1, scale: 1, y: 0 }}
                       viewport={{ once: true, margin: '-80px' }}
                       transition={{
-                        delay: 0.3 + (primaryStack.length * 0.06) + (index * 0.06),
+                        delay: 0.3 + primaryStack.length * 0.06 + index * 0.06,
                         duration: 0.5,
                         type: 'spring',
                         stiffness: 180,
@@ -299,7 +343,9 @@ export function IntroductionSection({
                           y: -8,
                         }}
                         whileTap={{ scale: 0.95 }}
-                        style={{ backgroundColor: bgColors[index % bgColors.length] }}
+                        style={{
+                          backgroundColor: bgColors[index % bgColors.length],
+                        }}
                         className="flex h-12 w-12 items-center justify-center rounded-xl border-[3px] border-black shadow-[4px_4px_0_0_#111] transition-shadow hover:shadow-[6px_6px_0_0_#111] sm:h-14 sm:w-14 sm:rounded-2xl">
                         <img
                           src={item.logoUrl}
@@ -318,7 +364,11 @@ export function IntroductionSection({
                           scale: hoveredToolIndex === index ? 1 : 0.8,
                           rotate: hoveredToolIndex === index ? -2 : 0,
                         }}
-                        transition={{ duration: 0.2, type: 'spring', stiffness: 200 }}
+                        transition={{
+                          duration: 0.2,
+                          type: 'spring',
+                          stiffness: 200,
+                        }}
                         className="pointer-events-none absolute -bottom-12 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg border-[2.5px] border-black bg-[#1A9B8E] px-3 py-1.5 text-xs font-black uppercase tracking-wider text-white shadow-[4px_4px_0_0_#111] sm:-bottom-14 sm:px-4 sm:py-2 sm:text-sm">
                         {item.name}
                       </motion.div>
@@ -343,7 +393,7 @@ export function IntroductionSection({
               delay: 0.15,
             }}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            style={{ 
+            style={{
               fontFamily: theme.fonts.body,
             }}
             className="relative ml-auto mr-0 max-w-4xl rounded-2xl border-[3px] border-black bg-[#FF8FB3] p-6 shadow-[6px_6px_0_0_#111] sm:rounded-3xl sm:border-4 sm:p-8 md:p-10 -rotate-[0.5deg]">
@@ -352,7 +402,13 @@ export function IntroductionSection({
               initial={{ opacity: 0, scale: 0.5, rotate: 25 }}
               whileInView={{ opacity: 1, scale: 1, rotate: 12 }}
               viewport={{ once: true, margin: '-80px' }}
-              transition={{ delay: 0.35, duration: 0.6, type: 'spring', stiffness: 180, damping: 12 }}
+              transition={{
+                delay: 0.35,
+                duration: 0.6,
+                type: 'spring',
+                stiffness: 180,
+                damping: 12,
+              }}
               className="absolute right-2 top-2 z-50 rounded-sm border-[2.5px] border-black bg-[#FCEE4B] px-4 py-2 shadow-[4px_4px_0_0_#111,0_0_0_2px_#FCEE4B] sm:right-3 sm:top-3 sm:px-5 sm:py-2.5 md:-right-4 md:-top-3">
               <span className="text-xs font-black uppercase tracking-wider text-[#111] sm:text-sm">
                 Artist
@@ -363,15 +419,19 @@ export function IntroductionSection({
             <div
               className="absolute inset-0 opacity-15"
               style={{
-                backgroundImage: 'radial-gradient(circle, #111 2.5px, transparent 2.5px)',
+                backgroundImage:
+                  'radial-gradient(circle, #111 2.5px, transparent 2.5px)',
                 backgroundSize: '24px 24px',
               }}
             />
-            
+
+            {/* Subtle background overlay for better text readability */}
+            <div className="absolute inset-0 bg-white/20 rounded-2xl sm:rounded-3xl" />
+
             {/* Content */}
             <div className="relative z-10 space-y-6">
-              <p className="text-[0.875rem] font-medium leading-[1.7] text-white sm:text-base sm:leading-[1.75] md:text-lg md:leading-[1.8] pt-8 sm:pt-0">
-                {paragraphs[1]}
+              <p className="text-[0.875rem] font-medium leading-[1.7] text-slate-900 sm:text-base sm:leading-[1.75] md:text-lg md:leading-[1.8] pt-8 sm:pt-0">
+                {highlightSkidrrow(paragraphs[1])}
               </p>
 
               {/* Tools */}
@@ -399,7 +459,9 @@ export function IntroductionSection({
                         y: -8,
                       }}
                       whileTap={{ scale: 0.95 }}
-                      style={{ backgroundColor: bgColors[index % bgColors.length] }}
+                      style={{
+                        backgroundColor: bgColors[index % bgColors.length],
+                      }}
                       className="flex h-12 w-12 items-center justify-center rounded-xl border-[3px] border-black shadow-[4px_4px_0_0_#111] transition-shadow hover:shadow-[6px_6px_0_0_#111] sm:h-14 sm:w-14 sm:rounded-2xl">
                       <img
                         src={item.logoUrl}
@@ -418,7 +480,11 @@ export function IntroductionSection({
                         scale: hoveredCreativeIndex === index ? 1 : 0.8,
                         rotate: hoveredCreativeIndex === index ? -2 : 0,
                       }}
-                      transition={{ duration: 0.2, type: 'spring', stiffness: 200 }}
+                      transition={{
+                        duration: 0.2,
+                        type: 'spring',
+                        stiffness: 200,
+                      }}
                       className="pointer-events-none absolute -bottom-12 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg border-[2.5px] border-black bg-[#FF4081] px-3 py-1.5 text-xs font-black uppercase tracking-wider text-white shadow-[4px_4px_0_0_#111] sm:-bottom-14 sm:px-4 sm:py-2 sm:text-sm">
                       {item.name}
                     </motion.div>
@@ -441,7 +507,7 @@ export function IntroductionSection({
           style={{ y: y1 }}
           className="absolute -right-4 -top-4 h-8 w-8 rotate-45 border-[3px] border-black bg-[#FFA366] sm:-right-6 sm:-top-6 sm:h-12 sm:w-12"
         />
-        
+
         {/* Additional shapes */}
         <motion.div
           initial={{ opacity: 0, scale: 0, x: 20, y: -20 }}
@@ -551,7 +617,12 @@ export function IntroductionSection({
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotate: -12 }}
             animate={{ opacity: 1, scale: 1, rotate: -10 }}
-            transition={{ delay: 0.3, duration: 0.5, type: 'spring', stiffness: 200 }}
+            transition={{
+              delay: 0.3,
+              duration: 0.5,
+              type: 'spring',
+              stiffness: 200,
+            }}
             className="absolute -left-4 -top-3 z-30 rounded-lg border border-white/40 bg-white/30 px-4 py-2 shadow-[0_6px_16px_0_rgba(0,0,0,0.25),0_0_0_1px_rgba(255,255,255,0.4)_inset] backdrop-blur-xl sm:-left-5 sm:-top-4 sm:px-5 sm:py-2.5">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-800 sm:text-sm">
               Engineer
@@ -559,13 +630,13 @@ export function IntroductionSection({
           </motion.div>
 
           <div className="relative z-10 space-y-6">
-            <p className="text-[0.875rem] leading-[1.65] text-slate-600 sm:text-base sm:leading-[1.7] md:text-lg md:leading-[1.75]">
+            <p className="text-[0.875rem] leading-[1.65] text-slate-800 sm:text-base sm:leading-[1.7] md:text-lg md:leading-[1.75]">
               {paragraphs[0]}
             </p>
 
             {/* Primary Stack */}
             <div className="space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-700 sm:text-sm">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-800 sm:text-sm">
                 Primary Stack
               </h4>
               <div className="flex flex-wrap gap-3 sm:gap-4">
@@ -588,7 +659,7 @@ export function IntroductionSection({
 
             {/* Tool Stack */}
             <div className="space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-700 sm:text-sm">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-800 sm:text-sm">
                 Tool Stack
               </h4>
               <div className="flex flex-wrap gap-3 sm:gap-4">
@@ -597,7 +668,9 @@ export function IntroductionSection({
                     key={item.name}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.4 + primaryStack.length * 0.05 + index * 0.05 }}
+                    transition={{
+                      delay: 0.4 + primaryStack.length * 0.05 + index * 0.05,
+                    }}
                     className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/20 bg-white/15 backdrop-blur-[20px] sm:h-14 sm:w-14">
                     <img
                       src={item.logoUrl}
@@ -626,7 +699,12 @@ export function IntroductionSection({
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotate: 12 }}
             animate={{ opacity: 1, scale: 1, rotate: 10 }}
-            transition={{ delay: 0.45, duration: 0.5, type: 'spring', stiffness: 200 }}
+            transition={{
+              delay: 0.45,
+              duration: 0.5,
+              type: 'spring',
+              stiffness: 200,
+            }}
             className="absolute right-2 top-2 z-50 rounded-lg border border-white/40 bg-white/30 px-4 py-2 shadow-[0_6px_16px_0_rgba(0,0,0,0.25),0_0_0_1px_rgba(255,255,255,0.4)_inset] backdrop-blur-xl sm:right-3 sm:top-3 sm:px-5 sm:py-2.5 md:-right-4 md:-top-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-800 sm:text-sm">
               Artist
@@ -634,8 +712,8 @@ export function IntroductionSection({
           </motion.div>
 
           <div className="relative z-10 space-y-6">
-            <p className="text-[0.875rem] leading-[1.65] text-slate-600 sm:text-base sm:leading-[1.7] md:text-lg md:leading-[1.75]">
-              {paragraphs[1]}
+            <p className="text-[0.875rem] leading-[1.65] text-slate-800 sm:text-base sm:leading-[1.7] md:text-lg md:leading-[1.75]">
+              {highlightSkidrrow(paragraphs[1])}
             </p>
 
             {/* Tools */}
@@ -724,4 +802,3 @@ export function IntroductionSection({
     </div>
   )
 }
-

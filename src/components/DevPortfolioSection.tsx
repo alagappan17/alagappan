@@ -14,6 +14,23 @@ interface DevPortfolioSectionProps {
   theme: ThemeConfig
 }
 
+function getDisplayUrl(url: string): string {
+  try {
+    const urlObj = new URL(url)
+    let displayUrl = urlObj.hostname.replace(/^www\./, '')
+    if (urlObj.pathname && urlObj.pathname !== '/') {
+      displayUrl += urlObj.pathname.replace(/\/$/, '')
+    }
+    return displayUrl
+  } catch {
+    // Fallback: simple string manipulation
+    return url
+      .replace(/^https?:\/\//, '')
+      .replace(/^www\./, '')
+      .replace(/\/$/, '')
+  }
+}
+
 export function DevPortfolioSection({
   techStack,
   projects,
@@ -106,10 +123,15 @@ export function DevPortfolioSection({
                       href={project.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      whileHover={{ scale: 1.05 }}
+                      whileHover={{ 
+                        scale: 1.05,
+                        boxShadow: '3px 3px 0 0 #111',
+                        y: -2,
+                      }}
                       whileTap={{ scale: 0.95 }}
-                      className="mt-4 inline-flex items-center gap-2 rounded-lg border-[2.5px] border-black bg-[#1A9B8E] px-3 py-2 text-xs font-black uppercase tracking-wider text-white shadow-[3px_3px_0_0_#111] transition-all hover:shadow-[4px_4px_0_0_#111] sm:text-sm">
-                      Website →
+                      className="mt-4 inline-flex items-center gap-1.5 rounded-lg border-[2.5px] border-black bg-[#1A9B8E] px-3 py-1.5 text-xs font-black uppercase tracking-wide text-white shadow-[2px_2px_0_0_#111] transition-all hover:bg-[#2EC4B6] sm:gap-2 sm:px-4 sm:py-2 sm:text-sm">
+                      {getDisplayUrl(project.url)}
+                      <span>→</span>
                     </motion.a>
                   )}
                 </div>
@@ -176,10 +198,14 @@ export function DevPortfolioSection({
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  y: -2,
+                }}
                 whileTap={{ scale: 0.95 }}
-                className="mt-3 inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/20 px-3 py-2 text-xs font-semibold text-slate-800 backdrop-blur-sm transition-all hover:bg-white/30 sm:text-sm">
-                Website →
+                className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/20 px-3 py-1.5 text-xs font-semibold text-slate-700 backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/30 hover:text-slate-900 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm">
+                {getDisplayUrl(project.url)}
+                <span>→</span>
               </motion.a>
             )}
           </motion.div>

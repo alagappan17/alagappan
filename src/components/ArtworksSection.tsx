@@ -77,7 +77,7 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
     const timeoutId = setTimeout(() => {
       artworkRefs.current.forEach((element, index) => {
         if (!element) return
-        
+
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -97,7 +97,7 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
             threshold: 0.01,
           }
         )
-        
+
         observer.observe(element)
         observers.push(observer)
       })
@@ -114,43 +114,64 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
     if (!scrollContainer) return
 
     const handleWheel = (e: WheelEvent) => {
-      const atStart = scrollContainer.scrollLeft === 0
-      const atEnd =
-        scrollContainer.scrollLeft + scrollContainer.clientWidth >=
-        scrollContainer.scrollWidth - 1
-
-      // Determine scroll delta - prioritize deltaX (horizontal) if present, otherwise use deltaY
-      // Touchpads can send both, so we check which one is more significant
-      const hasHorizontalDelta = Math.abs(e.deltaX) > 0
-      const hasVerticalDelta = Math.abs(e.deltaY) > 0
-      
-      // If we have horizontal delta, use it (touchpad horizontal gesture)
-      // Otherwise, convert vertical delta to horizontal scroll
-      const scrollDelta = hasHorizontalDelta ? e.deltaX : (hasVerticalDelta ? e.deltaY : 0)
-      
-      if (scrollDelta === 0) return
-
-      // Check if this is a pure vertical scroll (no horizontal component)
-      // Only allow vertical scroll to pass through at boundaries
-      const isPureVertical = !hasHorizontalDelta && hasVerticalDelta
-
-      // If we're at the boundaries and it's a pure vertical scroll, allow normal page scroll
-      if (isPureVertical) {
-        if ((atStart && e.deltaY < 0) || (atEnd && e.deltaY > 0)) {
-          return
-        }
-      } else {
-        // Horizontal or mixed gesture - check boundaries for horizontal scroll
-        if ((atStart && scrollDelta < 0) || (atEnd && scrollDelta > 0)) {
-          return
-        }
+      // Only handle if container has horizontal overflow
+      if (scrollContainer.scrollWidth <= scrollContainer.clientWidth) {
+        return
       }
 
-      // If we have horizontal content and we're not at the boundaries, handle the scroll
-      if (scrollContainer.scrollWidth > scrollContainer.clientWidth) {
+      const deltaX = e.deltaX
+      const deltaY = e.deltaY
+      const deltaMode = e.deltaMode
+
+      // Detect mouse wheel vs trackpad:
+      // - Mouse wheel typically has deltaMode === 0 (pixel mode) and only deltaY
+      // - Trackpads typically have both deltaX and deltaY, or deltaMode !== 0
+      // - Trackpads often send smoother, smaller delta values
+      const isLikelyMouseWheel =
+        deltaMode === 0 && // Pixel mode (typical for mouse wheel)
+        Math.abs(deltaX) < 1 && // No or minimal horizontal delta
+        Math.abs(deltaY) > 0 // Has vertical delta
+
+      // For trackpads (mousepad), allow normal vertical scrolling
+      if (!isLikelyMouseWheel) {
+        return
+      }
+
+      // Only handle vertical mouse wheel scrolling
+      if (Math.abs(deltaY) > 0) {
+        const atStart = scrollContainer.scrollLeft === 0
+        const atEnd =
+          scrollContainer.scrollLeft + scrollContainer.clientWidth >=
+          scrollContainer.scrollWidth - 1
+
+        const isScrollingUp = deltaY < 0
+        const isScrollingDown = deltaY > 0
+
+        // Check if we can scroll horizontally
+        const canScrollLeft = !atStart
+        const canScrollRight = !atEnd
+
+        // If we can't scroll in the desired direction, allow normal page scroll
+        if (
+          (isScrollingUp && !canScrollLeft) ||
+          (isScrollingDown && !canScrollRight)
+        ) {
+          return
+        }
+
+        // Try to scroll horizontally
+        const previousScrollLeft = scrollContainer.scrollLeft
+        scrollContainer.scrollLeft += deltaY
+
+        // Check if horizontal scroll actually happened
+        // If it didn't (e.g., already at boundary), allow normal scroll
+        if (scrollContainer.scrollLeft === previousScrollLeft) {
+          return
+        }
+
+        // Successfully scrolled horizontally, prevent default page scroll
         e.preventDefault()
         e.stopPropagation()
-        scrollContainer.scrollLeft += scrollDelta
       }
     }
 
@@ -161,26 +182,13 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
     // Initial check
     checkScrollPosition()
 
+    // Attach wheel listener
+    scrollContainer.addEventListener('wheel', handleWheel, {
+      passive: false,
+    })
+
     // Listen to scroll events
     scrollContainer.addEventListener('scroll', handleScroll, { passive: true })
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            scrollContainer.addEventListener('wheel', handleWheel, {
-              passive: false,
-            })
-            checkScrollPosition()
-          } else {
-            scrollContainer.removeEventListener('wheel', handleWheel)
-          }
-        })
-      },
-      { threshold: 0.3 }
-    )
-
-    observer.observe(scrollContainer)
 
     // Check on resize
     const handleResize = () => {
@@ -192,7 +200,6 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
       scrollContainer.removeEventListener('wheel', handleWheel)
       scrollContainer.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleResize)
-      observer.disconnect()
     }
   }, [])
 
@@ -200,19 +207,21 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
     if (artwork.type === 'youtube') {
       // Extract YouTube video ID from various formats
       let videoId: string | null = null
-      
+
       // Handle regular YouTube URLs
-      const watchMatch = artwork.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)
+      const watchMatch = artwork.url.match(
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/
+      )
       if (watchMatch) {
         videoId = watchMatch[1]
       }
-      
+
       // Handle YouTube Shorts URLs
       const shortsMatch = artwork.url.match(/youtube\.com\/shorts\/([^&\n?#]+)/)
       if (shortsMatch) {
         videoId = shortsMatch[1]
       }
-      
+
       if (!videoId) {
         return (
           <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-500">
@@ -232,7 +241,6 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
         />
       )
     }
-
 
     if (artwork.type === 'video') {
       return (
@@ -265,7 +273,12 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
           initial={{ opacity: 0, x: -20, rotate: -2 }}
           whileInView={{ opacity: 1, x: 0, rotate: 1 }}
           viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.6, delay: 0.2, type: 'spring', stiffness: 100 }}
+          transition={{
+            duration: 0.6,
+            delay: 0.2,
+            type: 'spring',
+            stiffness: 100,
+          }}
           className="mb-6 sm:mb-8">
           <div className="inline-flex rotate-1 items-center gap-2 rounded-xl border-[3px] border-black bg-[#8B008B] px-4 py-2 shadow-[4px_4px_0_0_#111] sm:gap-3 sm:px-6 sm:py-3">
             <div className="h-2 w-2 rounded-full bg-white ring-2 ring-black sm:h-3 sm:w-3" />
@@ -335,100 +348,109 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
               scrollBehavior: 'smooth',
               WebkitOverflowScrolling: 'touch',
             }}>
-            <div className="flex flex-col gap-3 sm:gap-4 md:gap-5 pt-2" style={{ width: 'max-content' }}>
-            {rows.map((rowArtworks, rowIndex) => {
-              const rowHeight = 280 // Height for each row in pixels
-              return (
-                <motion.div
-                  key={`row-${rowIndex}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-50px' }}
-                  transition={{
-                    duration: 0.6,
-                    delay: 0.3 + rowIndex * 0.15,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="flex gap-3 sm:gap-4 md:gap-5"
-                  style={{
-                    height: `${rowHeight}px`,
-                  }}>
-                  {rowArtworks.map((artwork, index) => {
-                    const width = calculateWidth(artwork.aspectRatio, rowHeight)
-                    const isEvenRow = rowIndex % 2 === 0
-                    const globalIndex = rowIndex === 0 ? index : rows[0].length + index
-                    const shouldLoad = visibleArtworks.has(globalIndex)
-                    
-                    return (
-                      <motion.div
-                        key={`${artwork.name}-${rowIndex}-${index}`}
-                        ref={(el) => {
-                          if (el) artworkRefs.current.set(globalIndex, el)
-                        }}
-                        initial={{ 
-                          opacity: 0, 
-                          x: isEvenRow ? -50 : 50,
-                          y: 20,
-                          scale: 0.8,
-                          rotate: isEvenRow ? -5 : 5,
-                        }}
-                        whileInView={{ 
-                          opacity: 1, 
-                          x: 0,
-                          y: 0,
-                          scale: 1,
-                          rotate: 0,
-                        }}
-                        viewport={{ once: true, margin: '-50px' }}
-                        transition={{
-                          delay: 0.4 + rowIndex * 0.15 + index * 0.08,
-                          duration: 0.6,
-                          type: 'spring',
-                          stiffness: 100,
-                          damping: 15,
-                        }}
-                        className="relative flex-shrink-0 cursor-pointer"
-                        style={{ scrollSnapAlign: 'start' }}>
-                        <a
-                          href={artwork.instagramUrl || artwork.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block h-full w-full"
-                          onClick={(e) => {
-                            // Don't navigate if clicking on YouTube iframe
-                            if (artwork.type === 'youtube') {
-                              e.preventDefault()
-                              window.open(artwork.instagramUrl || artwork.url, '_blank')
-                            }
-                          }}>
-                          <div
-                            className="relative h-full overflow-hidden rounded-xl border-[3px] border-black bg-white shadow-[4px_4px_0_0_#111] transition-all duration-300 hover:-translate-y-2 hover:shadow-[8px_8px_0_0_#111] hover:bg-gray-50 sm:rounded-2xl"
-                            style={{
-                              width: `${width}px`,
-                            }}>
-                            {/* Media - Lazy loaded */}
-                            {shouldLoad ? (
-                              renderArtworkMedia(artwork)
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center bg-gray-100">
-                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black"></div>
-                              </div>
-                            )}
+            <div
+              className="flex flex-col gap-3 sm:gap-4 md:gap-5 pt-2"
+              style={{ width: 'max-content' }}>
+              {rows.map((rowArtworks, rowIndex) => {
+                const rowHeight = 280 // Height for each row in pixels
+                return (
+                  <motion.div
+                    key={`row-${rowIndex}`}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-50px' }}
+                    transition={{
+                      duration: 0.6,
+                      delay: 0.3 + rowIndex * 0.15,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="flex gap-3 sm:gap-4 md:gap-5"
+                    style={{
+                      height: `${rowHeight}px`,
+                    }}>
+                    {rowArtworks.map((artwork, index) => {
+                      const width = calculateWidth(
+                        artwork.aspectRatio,
+                        rowHeight
+                      )
+                      const isEvenRow = rowIndex % 2 === 0
+                      const globalIndex =
+                        rowIndex === 0 ? index : rows[0].length + index
+                      const shouldLoad = visibleArtworks.has(globalIndex)
 
-                            {/* Name Badge */}
-                            <div className="absolute bottom-1.5 left-1.5 right-1.5 sm:bottom-2 sm:left-2 sm:right-2">
-                              <div className="inline-block rounded-md border-2 border-black bg-[#FCEE4B] px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-black sm:text-xs">
-                                {artwork.name}
+                      return (
+                        <motion.div
+                          key={`${artwork.name}-${rowIndex}-${index}`}
+                          ref={(el) => {
+                            if (el) artworkRefs.current.set(globalIndex, el)
+                          }}
+                          initial={{
+                            opacity: 0,
+                            x: isEvenRow ? -50 : 50,
+                            y: 20,
+                            scale: 0.8,
+                            rotate: isEvenRow ? -5 : 5,
+                          }}
+                          whileInView={{
+                            opacity: 1,
+                            x: 0,
+                            y: 0,
+                            scale: 1,
+                            rotate: 0,
+                          }}
+                          viewport={{ once: true, margin: '-50px' }}
+                          transition={{
+                            delay: 0.4 + rowIndex * 0.15 + index * 0.08,
+                            duration: 0.6,
+                            type: 'spring',
+                            stiffness: 100,
+                            damping: 15,
+                          }}
+                          className="relative flex-shrink-0 cursor-pointer"
+                          style={{ scrollSnapAlign: 'start' }}>
+                          <a
+                            href={artwork.instagramUrl || artwork.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block h-full w-full"
+                            onClick={(e) => {
+                              // Don't navigate if clicking on YouTube iframe
+                              if (artwork.type === 'youtube') {
+                                e.preventDefault()
+                                window.open(
+                                  artwork.instagramUrl || artwork.url,
+                                  '_blank'
+                                )
+                              }
+                            }}>
+                            <div
+                              className="relative h-full overflow-hidden rounded-xl border-[3px] border-black bg-white shadow-[4px_4px_0_0_#111] transition-all duration-300 hover:-translate-y-2 hover:shadow-[8px_8px_0_0_#111] hover:bg-gray-50 sm:rounded-2xl"
+                              style={{
+                                width: `${width}px`,
+                              }}>
+                              {/* Media - Lazy loaded */}
+                              {shouldLoad ? (
+                                renderArtworkMedia(artwork)
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center bg-gray-100">
+                                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black"></div>
+                                </div>
+                              )}
+
+                              {/* Name Badge */}
+                              <div className="absolute bottom-1.5 left-1.5 right-1.5 sm:bottom-2 sm:left-2 sm:right-2">
+                                <div className="inline-block rounded-md border-2 border-black bg-[#FCEE4B] px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-black sm:text-xs">
+                                  {artwork.name}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </a>
-                      </motion.div>
-                    )
-                  })}
-                </motion.div>
-              )
-            })}
+                          </a>
+                        </motion.div>
+                      )
+                    })}
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -511,97 +533,102 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
             scrollBehavior: 'smooth',
             WebkitOverflowScrolling: 'touch',
           }}>
-          <div className="flex flex-col gap-3 sm:gap-4 md:gap-5 pt-2" style={{ width: 'max-content' }}>
-          {rows.map((rowArtworks, rowIndex) => {
-            const rowHeight = 280 // Height for each row in pixels
-            return (
-              <motion.div
-                key={`row-${rowIndex}`}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.3 + rowIndex * 0.2,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="flex gap-3 sm:gap-4 md:gap-5"
-                style={{
-                  height: `${rowHeight}px`,
-                }}>
-                {rowArtworks.map((artwork, index) => {
-                  const width = calculateWidth(artwork.aspectRatio, rowHeight)
-                  const globalIndex = rowIndex === 0 ? index : rows[0].length + index
-                  const shouldLoad = visibleArtworks.has(globalIndex)
-                  
-                  return (
-                    <motion.div
-                      key={`${artwork.name}-${rowIndex}-${index}`}
-                      ref={(el) => {
-                        if (el) artworkRefs.current.set(globalIndex, el)
-                      }}
-                      initial={{ 
-                        opacity: 0, 
-                        y: 30,
-                        scale: 0.9,
-                      }}
-                      whileInView={{ 
-                        opacity: 1, 
-                        y: 0,
-                        scale: 1,
-                      }}
-                      viewport={{ once: true, margin: '-50px' }}
-                      transition={{
-                        delay: 0.4 + rowIndex * 0.2 + index * 0.1,
-                        duration: 0.6,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                      className="relative flex-shrink-0 cursor-pointer"
-                      style={{ scrollSnapAlign: 'start' }}>
-                      <a
-                        href={artwork.instagramUrl || artwork.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block h-full w-full"
-                        onClick={(e) => {
-                          // Don't navigate if clicking on YouTube iframe
-                          if (artwork.type === 'youtube') {
-                            e.preventDefault()
-                            window.open(artwork.instagramUrl || artwork.url, '_blank')
-                          }
-                        }}>
-                        <div
-                          className="relative h-full overflow-hidden rounded-xl border border-white/30 bg-white/10 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] hover:bg-white/20 hover:border-white/50 sm:rounded-2xl"
-                          style={{
-                            width: `${width}px`,
-                          }}>
-                          {/* Media - Lazy loaded */}
-                          {shouldLoad ? (
-                            renderArtworkMedia(artwork)
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-white/5">
-                              <div className="h-8 w-8 animate-spin rounded-full border-4 border-white/20 border-t-white/60"></div>
-                            </div>
-                          )}
+          <div
+            className="flex flex-col gap-3 sm:gap-4 md:gap-5 pt-2"
+            style={{ width: 'max-content' }}>
+            {rows.map((rowArtworks, rowIndex) => {
+              const rowHeight = 280 // Height for each row in pixels
+              return (
+                <motion.div
+                  key={`row-${rowIndex}`}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-50px' }}
+                  transition={{
+                    duration: 0.7,
+                    delay: 0.3 + rowIndex * 0.2,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="flex gap-3 sm:gap-4 md:gap-5"
+                  style={{
+                    height: `${rowHeight}px`,
+                  }}>
+                  {rowArtworks.map((artwork, index) => {
+                    const width = calculateWidth(artwork.aspectRatio, rowHeight)
+                    const globalIndex =
+                      rowIndex === 0 ? index : rows[0].length + index
+                    const shouldLoad = visibleArtworks.has(globalIndex)
 
-                          {/* Name Badge */}
-                          <div className="absolute bottom-1.5 left-1.5 right-1.5 sm:bottom-2 sm:left-2 sm:right-2">
-                            <div className="inline-block rounded-md border border-white/40 bg-white/20 px-1.5 py-0.5 text-[0.6rem] font-semibold uppercase text-white backdrop-blur-sm sm:text-xs">
-                              {artwork.name}
+                    return (
+                      <motion.div
+                        key={`${artwork.name}-${rowIndex}-${index}`}
+                        ref={(el) => {
+                          if (el) artworkRefs.current.set(globalIndex, el)
+                        }}
+                        initial={{
+                          opacity: 0,
+                          y: 30,
+                          scale: 0.9,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          y: 0,
+                          scale: 1,
+                        }}
+                        viewport={{ once: true, margin: '-50px' }}
+                        transition={{
+                          delay: 0.4 + rowIndex * 0.2 + index * 0.1,
+                          duration: 0.6,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="relative flex-shrink-0 cursor-pointer"
+                        style={{ scrollSnapAlign: 'start' }}>
+                        <a
+                          href={artwork.instagramUrl || artwork.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block h-full w-full"
+                          onClick={(e) => {
+                            // Don't navigate if clicking on YouTube iframe
+                            if (artwork.type === 'youtube') {
+                              e.preventDefault()
+                              window.open(
+                                artwork.instagramUrl || artwork.url,
+                                '_blank'
+                              )
+                            }
+                          }}>
+                          <div
+                            className="relative h-full overflow-hidden rounded-xl border border-white/30 bg-white/10 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] hover:bg-white/20 hover:border-white/50 sm:rounded-2xl"
+                            style={{
+                              width: `${width}px`,
+                            }}>
+                            {/* Media - Lazy loaded */}
+                            {shouldLoad ? (
+                              renderArtworkMedia(artwork)
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center bg-white/5">
+                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-white/20 border-t-white/60"></div>
+                              </div>
+                            )}
+
+                            {/* Name Badge */}
+                            <div className="absolute bottom-1.5 left-1.5 right-1.5 sm:bottom-2 sm:left-2 sm:right-2">
+                              <div className="inline-block rounded-md border border-white/40 bg-white/20 px-1.5 py-0.5 text-[0.6rem] font-semibold uppercase text-white backdrop-blur-sm sm:text-xs">
+                                {artwork.name}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </a>
-                    </motion.div>
-                  )
+                        </a>
+                      </motion.div>
+                    )
                   })}
-              </motion.div>
-            )
-          })}
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </div>
     </div>
   )
 }
-

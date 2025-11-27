@@ -39,4 +39,3 @@ export function useSpotifyPlaying(): boolean {
 
   return isPlaying
 }
-
