@@ -2,6 +2,7 @@ import { useRef, useEffect, useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { type ThemeConfig } from '../themes/types'
 import { type Artwork } from '../content/personal-info'
+import { LazyVideo } from './LazyVideo'
 
 interface ArtworksSectionProps {
   artworks: Artwork[]
@@ -237,23 +238,14 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
+          loading="lazy"
           title={artwork.name}
         />
       )
     }
 
     if (artwork.type === 'video') {
-      return (
-        <video
-          src={artwork.url}
-          autoPlay
-          loop
-          muted
-          playsInline
-          controls={false}
-          className="h-full w-full object-cover"
-        />
-      )
+      return <LazyVideo src={artwork.url} className="h-full w-full" />
     }
     return (
       <img
@@ -261,6 +253,7 @@ export function ArtworksSection({ artworks, theme }: ArtworksSectionProps) {
         alt={artwork.name}
         className="h-full w-full object-cover"
         loading="lazy"
+        decoding="async"
       />
     )
   }

@@ -1,18 +1,47 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { type ThemeConfig } from './themes/types'
 import { personalInfo } from './content/personal-info'
 import { ProfileCard } from './components/ProfileCard'
 import { Badge } from './components/Badge'
 import { ProfileHeader } from './components/ProfileHeader'
-import { IntroductionSection } from './components/IntroductionSection'
-import { DevPortfolioSection } from './components/DevPortfolioSection'
 import { ProjectSection } from './components/ProjectSection'
 import { LinksList } from './components/LinksList'
 import { LocationFooter } from './components/LocationFooter'
-import { ArtworksSection } from './components/ArtworksSection'
-import { ConnectSection } from './components/ConnectSection'
-import { LifestyleSection } from './components/LifestyleSection'
+
+const IntroductionSection = lazy(() =>
+  import('./components/IntroductionSection').then((m) => ({
+    default: m.IntroductionSection,
+  }))
+)
+const DevPortfolioSection = lazy(() =>
+  import('./components/DevPortfolioSection').then((m) => ({
+    default: m.DevPortfolioSection,
+  }))
+)
+const ArtworksSection = lazy(() =>
+  import('./components/ArtworksSection').then((m) => ({
+    default: m.ArtworksSection,
+  }))
+)
+const LifestyleSection = lazy(() =>
+  import('./components/LifestyleSection').then((m) => ({
+    default: m.LifestyleSection,
+  }))
+)
+const ConnectSection = lazy(() =>
+  import('./components/ConnectSection').then((m) => ({
+    default: m.ConnectSection,
+  }))
+)
+
+function SectionFallback() {
+  return (
+    <div className="flex min-h-[200px] items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+    </div>
+  )
+}
 
 interface ThemeLayoutProps {
   theme: ThemeConfig
@@ -297,16 +326,18 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         />
 
         <div className="relative z-10 mx-auto max-w-6xl">
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={theme.animations.body}>
-            <IntroductionSection
-              paragraphs={personalInfo.introduction}
-              theme={theme}
-            />
-          </motion.div>
+          <Suspense fallback={<SectionFallback />}>
+            <motion.div
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={theme.animations.body}>
+              <IntroductionSection
+                paragraphs={personalInfo.introduction}
+                theme={theme}
+              />
+            </motion.div>
+          </Suspense>
         </div>
       </div>
 
@@ -321,18 +352,20 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         />
 
         <div className="relative z-10 mx-auto max-w-6xl">
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={theme.animations.body}>
-            <DevPortfolioSection
-              techStack={personalInfo.techStack}
-              projects={personalInfo.projects}
-              timeline={personalInfo.timeline}
-              theme={theme}
-            />
-          </motion.div>
+          <Suspense fallback={<SectionFallback />}>
+            <motion.div
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={theme.animations.body}>
+              <DevPortfolioSection
+                techStack={personalInfo.techStack}
+                projects={personalInfo.projects}
+                timeline={personalInfo.timeline}
+                theme={theme}
+              />
+            </motion.div>
+          </Suspense>
         </div>
       </div>
 
@@ -347,13 +380,15 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         />
 
         <div className="relative z-10 mx-auto max-w-6xl">
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={theme.animations.body}>
-            <ArtworksSection artworks={personalInfo.artworks} theme={theme} />
-          </motion.div>
+          <Suspense fallback={<SectionFallback />}>
+            <motion.div
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={theme.animations.body}>
+              <ArtworksSection artworks={personalInfo.artworks} theme={theme} />
+            </motion.div>
+          </Suspense>
         </div>
       </div>
 
@@ -368,16 +403,18 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         />
 
         <div className="relative z-10 mx-auto max-w-6xl">
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={theme.animations.body}>
-            <LifestyleSection
-              lifestyleItems={personalInfo.lifestyle}
-              theme={theme}
-            />
-          </motion.div>
+          <Suspense fallback={<SectionFallback />}>
+            <motion.div
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={theme.animations.body}>
+              <LifestyleSection
+                lifestyleItems={personalInfo.lifestyle}
+                theme={theme}
+              />
+            </motion.div>
+          </Suspense>
         </div>
       </div>
 
@@ -392,16 +429,18 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         />
 
         <div className="relative z-10 mx-auto max-w-6xl">
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={theme.animations.body}>
-            <ConnectSection
-              theme={theme}
-              socialLinks={personalInfo.socialLinks}
-            />
-          </motion.div>
+          <Suspense fallback={<SectionFallback />}>
+            <motion.div
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={theme.animations.body}>
+              <ConnectSection
+                theme={theme}
+                socialLinks={personalInfo.socialLinks}
+              />
+            </motion.div>
+          </Suspense>
         </div>
       </div>
     </>

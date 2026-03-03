@@ -571,7 +571,7 @@ export const personalInfo = {
   lifestyle: [
     {
       id: 'lifestyle-2',
-      url: '/lifestyle/002.png',
+      url: '/lifestyle/002.jpg',
       caption: '',
       interest: 'Open Ears Forum',
       rotation: 8,
@@ -599,7 +599,7 @@ export const personalInfo = {
     },
     {
       id: 'lifestyle-6',
-      url: '/lifestyle/006.png',
+      url: '/lifestyle/006.jpg',
       caption: '',
       interest: 'Nathula Pass',
       rotation: 10,
@@ -634,7 +634,7 @@ export const personalInfo = {
     },
     {
       id: 'lifestyle-13',
-      url: '/lifestyle/013.png',
+      url: '/lifestyle/013.jpg',
       caption: '',
       interest: 'Meghalaya',
       rotation: -4,
@@ -648,14 +648,14 @@ export const personalInfo = {
     },
     {
       id: 'lifestyle-17',
-      url: '/lifestyle/016.png',
+      url: '/lifestyle/016.jpg',
       caption: '',
       interest: 'Kudremukh',
       rotation: 7,
     },
     {
       id: 'lifestyle-18',
-      url: '/lifestyle/015.png',
+      url: '/lifestyle/015.jpg',
       caption: '',
       interest: 'GDG Build with AI',
       rotation: -6,

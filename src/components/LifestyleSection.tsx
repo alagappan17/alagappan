@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { type ThemeConfig } from '../themes/types'
 import { type LifestyleItem } from '../content/personal-info'
+import { LazyImage } from './LazyImage'
 
 interface LifestyleSectionProps {
   lifestyleItems: LifestyleItem[]
@@ -108,11 +109,10 @@ export function LifestyleSection({
                     }}>
                     <div className="relative w-full rounded-lg border-[3px] border-black bg-white p-0.5 shadow-[6px_6px_0_0_#111] transition-all hover:shadow-[8px_8px_0_0_#111] sm:rounded-xl sm:border-4 sm:p-1 md:rounded-2xl">
                       <div className="relative w-full overflow-hidden rounded-md border-2 border-black bg-white sm:rounded-lg">
-                        <img
+                        <LazyImage
                           src={item.url}
                           alt={item.interest}
                           className="w-full h-auto block"
-                          loading="lazy"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement
                             const colors = ['#FCEE4B', '#FF6F91', '#2EC4B6']

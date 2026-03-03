@@ -1,9 +1,20 @@
-import { useState, type FormEvent } from 'react'
+import { useState, lazy, Suspense, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import emailjs from '@emailjs/browser'
 import { type ThemeConfig } from '../themes/types'
-import { ThreeObject } from './ThreeObject'
 import { SpotifyNowPlaying } from './SpotifyNowPlaying'
+
+const ThreeObject = lazy(() =>
+  import('./ThreeObject').then((m) => ({ default: m.ThreeObject }))
+)
+
+function ThreeObjectFallback() {
+  return (
+    <div className="flex h-full w-full items-center justify-center rounded-[1.5rem] border-[3px] border-black bg-[#FCEE4B] sm:rounded-[2.5rem]">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+    </div>
+  )
+}
 
 interface SocialLink {
   label: string
@@ -248,7 +259,9 @@ export function ConnectSection({ theme, socialLinks }: ConnectSectionProps) {
             <div className="order-1 flex flex-col gap-6 lg:order-2">
               {/* Mobile Order: 1. 3D Object */}
               <div className="h-[250px] w-full sm:h-[300px] md:h-[320px]">
-                <ThreeObject themeId="brutalism" />
+                <Suspense fallback={<ThreeObjectFallback />}>
+                  <ThreeObject themeId="brutalism" />
+                </Suspense>
               </div>
 
               {/* Mobile Order: 2. Find Me (Social Links) */}
@@ -498,7 +511,9 @@ export function ConnectSection({ theme, socialLinks }: ConnectSectionProps) {
           <div className="flex flex-col gap-6">
             {/* 3D Object Container */}
             <div className="h-[250px] w-full sm:h-[300px] md:h-[320px]">
-              <ThreeObject themeId="liquidGlass" />
+              <Suspense fallback={<ThreeObjectFallback />}>
+                <ThreeObject themeId="liquidGlass" />
+              </Suspense>
             </div>
 
             {/* Social Links - Matching Tech Stack Style */}
