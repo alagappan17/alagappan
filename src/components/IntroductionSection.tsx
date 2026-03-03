@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useState, useRef } from 'react'
 import { type ThemeConfig } from '../themes/types'
 import { type TechStackItem } from '../content/personal-info'
@@ -61,22 +61,7 @@ export function IntroductionSection({
     number | null
   >(null)
 
-  // Parallax scroll effects
   const sectionRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  })
-
-  // Multiple parallax speeds for depth effect
-  const y1 = useTransform(scrollYProgress, [0, 1], [100, -100])
-  const y2 = useTransform(scrollYProgress, [0, 1], [200, -200])
-  const y3 = useTransform(scrollYProgress, [0, 1], [-50, 50])
-  const y4 = useTransform(scrollYProgress, [0, 1], [150, -150])
-  const y5 = useTransform(scrollYProgress, [0, 1], [-100, 100])
-  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 360])
-  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -360])
-  const rotate3 = useTransform(scrollYProgress, [0, 1], [0, 180])
 
   if (isBrutalism) {
     const bgColors = [
@@ -91,70 +76,17 @@ export function IntroductionSection({
     return (
       <div
         ref={sectionRef}
-        className="relative w-full space-y-4 sm:space-y-6 md:space-y-8">
-        {/* Parallax Background Decorations - Layer 1 (Far) */}
-        <motion.div
-          className="pointer-events-none absolute left-[8%] top-[10%] z-0 h-20 w-20 rounded-full border-[3px] border-black bg-[#FFB6C1] shadow-[6px_6px_0_0_#111] sm:h-24 sm:w-24 md:h-28 md:w-28"
-          style={{ y: y1, rotate: rotate1 }}
-        />
-
-        <motion.div
-          className="pointer-events-none absolute right-[10%] top-[15%] z-0 h-16 w-16 rotate-45 border-[3px] border-black bg-[#FCEE4B] shadow-[6px_6px_0_0_#111] sm:h-20 sm:w-20 md:h-24 md:w-24"
-          style={{ y: y2, rotate: rotate2 }}
-        />
-
-        <motion.div
-          className="pointer-events-none absolute left-[15%] bottom-[20%] z-0 h-24 w-24 border-[3px] border-black bg-[#2EC4B6] shadow-[6px_6px_0_0_#111] sm:h-28 sm:w-28 md:h-32 md:w-32"
-          style={{
-            y: y3,
-            rotate: rotate1,
-            clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
-          }}
-        />
-
-        <motion.div
-          className="pointer-events-none absolute right-[12%] bottom-[25%] z-0 h-18 w-18 rounded-full border-[3px] border-black bg-[#FF8FB3] shadow-[6px_6px_0_0_#111] sm:h-22 sm:w-22 md:h-26 md:w-26"
-          style={{ y: y4 }}
-        />
-
-        {/* Parallax Background Decorations - Layer 2 (Medium) */}
-        <motion.div
-          className="pointer-events-none absolute left-[5%] top-[45%] z-0 h-14 w-14 border-[3px] border-black bg-[#FFA366] shadow-[4px_4px_0_0_#111] sm:h-16 sm:w-16 md:h-20 md:w-20"
-          style={{
-            y: y5,
-            clipPath: 'polygon(50% 0%, 100% 90%, 0% 90%)',
-          }}
-        />
-
-        <motion.div
-          className="pointer-events-none absolute right-[8%] top-[50%] z-0 h-16 w-16 rounded-xl border-[3px] border-black bg-[#5EDCD4] shadow-[5px_5px_0_0_#111] sm:h-20 sm:w-20 md:h-24 md:w-24"
-          style={{ y: y1, rotate: rotate3 }}
-        />
-
-        <motion.div
-          className="pointer-events-none absolute left-[20%] top-[70%] z-0 h-12 w-12 rotate-45 border-[3px] border-black bg-[#FCEE4B] shadow-[4px_4px_0_0_#111] sm:h-14 sm:w-14 md:h-16 md:w-16"
-          style={{ y: y2 }}
-        />
-
-        <motion.div
-          className="pointer-events-none absolute right-[18%] bottom-[10%] z-0 h-20 w-20 rounded-full border-[3px] border-black bg-[#FF6F91] shadow-[5px_5px_0_0_#111] sm:h-24 sm:w-24 md:h-28 md:w-28"
-          style={{ y: y3, rotate: rotate2 }}
-        />
-
-        {/* Parallax Background Decorations - Layer 3 (Near) */}
-        <motion.div
-          className="pointer-events-none absolute left-[25%] top-[30%] z-0 h-10 w-10 rounded-lg border-[2.5px] border-black bg-[#2EC4B6] shadow-[3px_3px_0_0_#111] sm:h-12 sm:w-12"
-          style={{ y: y4, rotate: rotate1 }}
-        />
-
-        <motion.div
-          className="pointer-events-none absolute right-[25%] top-[65%] z-0 h-14 w-14 border-[2.5px] border-black bg-[#FFB6C1] shadow-[4px_4px_0_0_#111] sm:h-16 sm:w-16"
-          style={{
-            y: y5,
-            clipPath:
-              'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-          }}
-        />
+        className="relative w-full space-y-4 sm:space-y-6 md:space-y-8"
+        style={{ contain: 'layout style' }}>
+        {/* CSS-animated decorations (no JS, runs on compositor) */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+          <div className="brutalism-float-1 absolute left-[8%] top-[10%] h-20 w-20 rounded-full border-[3px] border-black bg-[#FFB6C1] shadow-[6px_6px_0_0_#111] sm:h-24 sm:w-24 md:h-28 md:w-28" style={{ willChange: 'transform' }} />
+          <div className="brutalism-float-2 absolute right-[10%] top-[15%] h-16 w-16 rotate-45 border-[3px] border-black bg-[#FCEE4B] shadow-[6px_6px_0_0_#111] sm:h-20 sm:w-20 md:h-24 md:w-24" style={{ willChange: 'transform' }} />
+          <div className="brutalism-float-5 absolute left-[15%] bottom-[20%] h-24 w-24 border-[3px] border-black bg-[#2EC4B6] shadow-[6px_6px_0_0_#111] sm:h-28 sm:w-28 md:h-32 md:w-32" style={{ willChange: 'transform', clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)' }} />
+          <div className="brutalism-float-3 absolute right-[12%] bottom-[25%] h-[4.5rem] w-[4.5rem] rounded-full border-[3px] border-black bg-[#FF8FB3] shadow-[6px_6px_0_0_#111] sm:h-[5.5rem] sm:w-[5.5rem] md:h-[6.5rem] md:w-[6.5rem]" style={{ willChange: 'transform', animationDelay: '-3s' }} />
+          <div className="brutalism-float-6 absolute left-[5%] top-[45%] h-14 w-14 border-[3px] border-black bg-[#FFA366] shadow-[4px_4px_0_0_#111] sm:h-16 sm:w-16 md:h-20 md:w-20" style={{ willChange: 'transform', clipPath: 'polygon(50% 0%, 100% 90%, 0% 90%)' }} />
+          <div className="brutalism-float-7 absolute right-[8%] top-[50%] h-16 w-16 rounded-xl border-[3px] border-black bg-[#5EDCD4] shadow-[5px_5px_0_0_#111] sm:h-20 sm:w-20 md:h-24 md:w-24" style={{ willChange: 'transform' }} />
+        </div>
 
         {/* Decorative header with rotated label */}
         <motion.div
@@ -504,29 +436,18 @@ export function IntroductionSection({
           whileInView={{ scale: 1, rotate: 45 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ delay: 0.6, type: 'spring', stiffness: 200 }}
-          style={{ y: y1 }}
           className="absolute -right-4 -top-4 h-8 w-8 rotate-45 border-[3px] border-black bg-[#FFA366] sm:-right-6 sm:-top-6 sm:h-12 sm:w-12"
         />
 
-        {/* Additional shapes */}
         <motion.div
           initial={{ opacity: 0, scale: 0, x: 20, y: -20 }}
           whileInView={{ opacity: 1, scale: 1, x: 0, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ delay: 0.7, type: 'spring', stiffness: 150 }}
-          style={{ y: y2 }}
           className="absolute right-4 top-4 sm:right-8 sm:top-8 md:right-12 md:top-12">
-          <motion.div
-            animate={{
-              rotate: [0, 15, -10, 0],
-              scale: [1, 1.1, 0.95, 1],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: 'easeInOut' as const,
-            }}
-            className="h-16 w-16 rounded-full border-[2.5px] border-black bg-[#2EC4B6] shadow-[4px_4px_0_0_#111] sm:h-20 sm:w-20 md:h-24 md:w-24"
+          <div
+            className="brutalism-float-4 h-16 w-16 rounded-full border-[2.5px] border-black bg-[#2EC4B6] shadow-[4px_4px_0_0_#111] sm:h-20 sm:w-20 md:h-24 md:w-24"
+            style={{ willChange: 'transform' }}
           />
         </motion.div>
 
@@ -535,19 +456,10 @@ export function IntroductionSection({
           whileInView={{ opacity: 1, scale: 1, x: 0, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ delay: 0.8, type: 'spring', stiffness: 150 }}
-          style={{ y: y5 }}
           className="absolute right-20 top-2 sm:right-32 sm:top-4 md:right-40 md:top-6">
-          <motion.div
-            animate={{
-              rotate: [0, -20, 15, 0],
-              y: [0, -5, 5, 0],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: 'easeInOut' as const,
-            }}
-            className="h-14 w-14 rotate-45 border-[2.5px] border-black bg-[#FF8FB3] shadow-[3px_3px_0_0_#111] sm:h-16 sm:w-16 md:h-18 md:w-18"
+          <div
+            className="brutalism-float-7 h-14 w-14 rotate-45 border-[2.5px] border-black bg-[#FF8FB3] shadow-[3px_3px_0_0_#111] sm:h-16 sm:w-16 md:h-18 md:w-18"
+            style={{ willChange: 'transform' }}
           />
         </motion.div>
 
@@ -556,22 +468,10 @@ export function IntroductionSection({
           whileInView={{ opacity: 1, scale: 1, x: 0, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ delay: 0.9, type: 'spring', stiffness: 150 }}
-          style={{ y: y1 }}
           className="absolute right-8 top-20 sm:right-12 sm:top-28 md:right-16 md:top-36">
-          <motion.div
-            animate={{
-              rotate: [0, 25, -15, 0],
-              scale: [1, 0.9, 1.1, 1],
-            }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              ease: 'easeInOut' as const,
-            }}
-            style={{
-              clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
-            }}
-            className="h-14 w-14 border-[2.5px] border-black bg-[#FCEE4B] shadow-[3px_3px_0_0_#111] sm:h-16 sm:w-16 md:h-18 md:w-18"
+          <div
+            className="brutalism-float-6 h-14 w-14 border-[2.5px] border-black bg-[#FCEE4B] shadow-[3px_3px_0_0_#111] sm:h-16 sm:w-16 md:h-18 md:w-18"
+            style={{ willChange: 'transform', clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
           />
         </motion.div>
       </div>
@@ -737,67 +637,25 @@ export function IntroductionSection({
         </motion.div>
       </div>
 
-      {/* Decorative glass shapes - Top Right */}
-      <div className="pointer-events-none absolute right-0 top-0 overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, scale: 0, x: 20, y: -20 }}
-          animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-          transition={{ delay: 0.6, type: 'spring', stiffness: 150 }}
-          className="absolute right-4 top-4 sm:right-8 sm:top-8 md:right-12 md:top-12">
-          <motion.div
-            animate={{
-              rotate: [0, 15, -10, 0],
-              scale: [1, 1.1, 0.95, 1],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: 'easeInOut' as const,
-            }}
-            className="h-16 w-16 rounded-full border border-white/25 bg-white/15 backdrop-blur-xl shadow-[0_4px_16px_0_rgba(0,0,0,0.15),0_0_0_0.5px_rgba(255,255,255,0.3)_inset] sm:h-20 sm:w-20 md:h-24 md:w-24"
+      <div aria-hidden className="pointer-events-none absolute right-0 top-0 overflow-hidden">
+        <div className="absolute right-4 top-4 sm:right-8 sm:top-8 md:right-12 md:top-12">
+          <div
+            className="glass-float-4 h-16 w-16 rounded-full border border-white/25 bg-white/15 backdrop-blur-xl shadow-[0_4px_16px_0_rgba(0,0,0,0.15),0_0_0_0.5px_rgba(255,255,255,0.3)_inset] sm:h-20 sm:w-20 md:h-24 md:w-24"
+            style={{ willChange: 'transform' }}
           />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0, x: 30, y: -10 }}
-          animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-          transition={{ delay: 0.7, type: 'spring', stiffness: 150 }}
-          className="absolute right-20 top-2 sm:right-32 sm:top-4 md:right-40 md:top-6">
-          <motion.div
-            animate={{
-              rotate: [0, -20, 15, 0],
-              y: [0, -5, 5, 0],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: 'easeInOut' as const,
-            }}
-            className="h-14 w-14 rotate-45 border border-white/25 bg-white/12 backdrop-blur-xl shadow-[0_4px_12px_0_rgba(0,0,0,0.12),0_0_0_0.5px_rgba(255,255,255,0.25)_inset] sm:h-16 sm:w-16 md:h-18 md:w-18"
+        </div>
+        <div className="absolute right-20 top-2 sm:right-32 sm:top-4 md:right-40 md:top-6">
+          <div
+            className="glass-float-7 h-14 w-14 rotate-45 border border-white/25 bg-white/12 backdrop-blur-xl shadow-[0_4px_12px_0_rgba(0,0,0,0.12),0_0_0_0.5px_rgba(255,255,255,0.25)_inset] sm:h-16 sm:w-16 md:h-18 md:w-18"
+            style={{ willChange: 'transform' }}
           />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0, x: 15, y: -30 }}
-          animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-          transition={{ delay: 0.8, type: 'spring', stiffness: 150 }}
-          className="absolute right-8 top-20 sm:right-12 sm:top-28 md:right-16 md:top-36">
-          <motion.div
-            animate={{
-              rotate: [0, 25, -15, 0],
-              scale: [1, 0.9, 1.1, 1],
-            }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              ease: 'easeInOut' as const,
-            }}
-            style={{
-              clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
-            }}
-            className="h-14 w-14 border border-white/25 bg-white/15 backdrop-blur-xl shadow-[0_4px_12px_0_rgba(0,0,0,0.12),0_0_0_0.5px_rgba(255,255,255,0.3)_inset] sm:h-16 sm:w-16 md:h-18 md:w-18"
+        </div>
+        <div className="absolute right-8 top-20 sm:right-12 sm:top-28 md:right-16 md:top-36">
+          <div
+            className="glass-float-6 h-14 w-14 border border-white/25 bg-white/15 backdrop-blur-xl shadow-[0_4px_12px_0_rgba(0,0,0,0.12),0_0_0_0.5px_rgba(255,255,255,0.3)_inset] sm:h-16 sm:w-16 md:h-18 md:w-18"
+            style={{ willChange: 'transform', clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
           />
-        </motion.div>
+        </div>
       </div>
     </div>
   )

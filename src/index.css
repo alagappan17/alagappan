@@ -35,3 +35,145 @@
     scrollbar-width: none;
   }
 }
+
+/* Brutalism background float animations (CSS compositor thread) */
+@keyframes brutalism-float-1 {
+  0%, 100% { transform: translate(0, 0) rotate(-6deg); }
+  33% { transform: translate(32px, 24px) rotate(-3deg); }
+  66% { transform: translate(-24px, -16px) rotate(-8deg); }
+}
+@keyframes brutalism-float-2 {
+  0%, 100% { transform: translate(0, 0) rotate(3deg); }
+  33% { transform: translate(-40px, -18px) rotate(6deg); }
+  66% { transform: translate(16px, 28px) rotate(1deg); }
+}
+@keyframes brutalism-float-3 {
+  0%, 100% { transform: translate(-32px, -24px) rotate(-8deg); }
+  25% { transform: translate(20px, 16px) rotate(8deg); }
+  50% { transform: translate(-28px, -20px) rotate(-6deg); }
+  75% { transform: translate(16px, 12px) rotate(4deg); }
+}
+@keyframes brutalism-float-4 {
+  0%, 100% { transform: translate(20px, -20px) rotate(4deg); }
+  25% { transform: translate(-16px, 12px) rotate(-4deg); }
+  50% { transform: translate(24px, -24px) rotate(2deg); }
+  75% { transform: translate(-12px, 16px) rotate(-2deg); }
+}
+@keyframes brutalism-float-5 {
+  0%, 100% { transform: translate(-24px, 16px) rotate(-5deg); }
+  33% { transform: translate(18px, -12px) rotate(6deg); }
+  66% { transform: translate(-20px, 20px) rotate(-4deg); }
+}
+@keyframes brutalism-float-6 {
+  0%, 100% { transform: translate(-16px, 20px) rotate(0deg) scale(1); }
+  25% { transform: translate(24px, -16px) rotate(12deg) scale(1.08); }
+  50% { transform: translate(-20px, 24px) rotate(-8deg) scale(0.96); }
+  75% { transform: translate(20px, -12px) rotate(6deg) scale(1.04); }
+}
+@keyframes brutalism-float-7 {
+  0%, 100% { transform: translate(18px, -18px) rotate(2deg); }
+  33% { transform: translate(-20px, 20px) rotate(-8deg); }
+  66% { transform: translate(16px, -16px) rotate(6deg); }
+}
+@keyframes brutalism-float-8 {
+  0%, 100% { transform: translate(-14px, 12px) rotate(0deg); }
+  25% { transform: translate(18px, -16px) rotate(8deg); }
+  50% { transform: translate(-12px, 10px) rotate(-6deg); }
+  75% { transform: translate(16px, -14px) rotate(4deg); }
+}
+
+.brutalism-float-1 { animation: brutalism-float-1 20s ease-in-out infinite alternate; }
+.brutalism-float-2 { animation: brutalism-float-2 24s ease-in-out infinite alternate; }
+.brutalism-float-3 { animation: brutalism-float-3 28s ease-in-out infinite alternate; }
+.brutalism-float-4 { animation: brutalism-float-4 26s ease-in-out infinite alternate; }
+.brutalism-float-5 { animation: brutalism-float-5 32s ease-in-out infinite alternate; }
+.brutalism-float-6 { animation: brutalism-float-6 24s ease-in-out infinite alternate; }
+.brutalism-float-7 { animation: brutalism-float-7 38s ease-in-out infinite alternate; }
+.brutalism-float-8 { animation: brutalism-float-8 30s ease-in-out infinite alternate; }
+
+/* Liquid glass background float animations */
+@keyframes glass-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, 15px) scale(1.1); }
+  66% { transform: translate(-15px, -10px) scale(0.95); }
+}
+@keyframes glass-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-18px, 12px) scale(0.9); }
+  66% { transform: translate(12px, -8px) scale(1.05); }
+}
+@keyframes glass-float-3 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(15px, -10px) rotate(5deg); }
+  66% { transform: translate(-12px, 8px) rotate(-3deg); }
+}
+@keyframes glass-float-4 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-14px, 12px) rotate(-4deg); }
+  66% { transform: translate(10px, -9px) rotate(3deg); }
+}
+@keyframes glass-float-5 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(16px, -14px) scale(1.08); }
+  66% { transform: translate(-12px, 10px) scale(0.92); }
+}
+@keyframes glass-float-6 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(14px, -12px) rotate(5deg); }
+  66% { transform: translate(-10px, 8px) rotate(-3deg); }
+}
+@keyframes glass-float-7 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-17px, 11px) scale(0.94); }
+  66% { transform: translate(13px, -7px) scale(1.06); }
+}
+@keyframes glass-float-8 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-12px, 10px) rotate(-4deg); }
+  66% { transform: translate(9px, -7px) rotate(3deg); }
+}
+@keyframes glass-pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.35; }
+}
+
+.glass-float-1 { animation: glass-float-1 20s ease-in-out infinite alternate; }
+.glass-float-2 { animation: glass-float-2 24s ease-in-out infinite alternate; }
+.glass-float-3 { animation: glass-float-3 22s ease-in-out infinite alternate; }
+.glass-float-4 { animation: glass-float-4 26s ease-in-out infinite alternate; }
+.glass-float-5 { animation: glass-float-5 28s ease-in-out infinite alternate; }
+.glass-float-6 { animation: glass-float-6 25s ease-in-out infinite alternate; }
+.glass-float-7 { animation: glass-float-7 30s ease-in-out infinite alternate; }
+.glass-float-8 { animation: glass-float-8 22s ease-in-out infinite alternate; }
+.glass-pulse { animation: glass-pulse 8s ease-in-out infinite; }
+
+/* Soundwave CSS animation (replaces 761KB GIF) */
+@keyframes soundwave-bar {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+.soundwave-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 100%;
+}
+.soundwave-bar {
+  width: 3px;
+  height: 100%;
+  border-radius: 1.5px;
+  animation: soundwave-bar 1.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brutalism-float-1, .brutalism-float-2, .brutalism-float-3,
+  .brutalism-float-4, .brutalism-float-5, .brutalism-float-6,
+  .brutalism-float-7, .brutalism-float-8,
+  .glass-float-1, .glass-float-2, .glass-float-3,
+  .glass-float-4, .glass-float-5, .glass-float-6,
+  .glass-float-7, .glass-float-8, .glass-pulse {
+    animation: none;
+  }
+}

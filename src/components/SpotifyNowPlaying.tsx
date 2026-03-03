@@ -125,16 +125,29 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
 
   const playbackState = getPlaybackState()
 
-  // Get the appropriate icon for the playback state
-  const getPlaybackIcon = () => {
-    switch (playbackState) {
-      case 'playing':
-        return '/playback/soundwave.gif'
-      case 'paused':
-        return '/playback/pause.png'
-      case 'offline':
-        return '/playback/offline.png'
+  const PlaybackIcon = ({ className = 'h-7 w-7 sm:h-8 sm:w-8' }: { className?: string }) => {
+    if (playbackState === 'playing') {
+      return (
+        <div className={`shrink-0 ${className}`}>
+          <div className="soundwave-container">
+            {[0, 0.2, 0.4, 0.6, 0.8].map((delay) => (
+              <div
+                key={delay}
+                className="soundwave-bar bg-current"
+                style={{ animationDelay: `${delay}s` }}
+              />
+            ))}
+          </div>
+        </div>
+      )
     }
+    return (
+      <img
+        src={playbackState === 'paused' ? '/playback/pause.png' : '/playback/offline.png'}
+        alt={playbackState}
+        className={`shrink-0 ${className}`}
+      />
+    )
   }
 
   // Calculate progress percentage
@@ -178,12 +191,7 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
                 {track.artist}
               </p>
             </div>
-            {/* Playback Icon on the right */}
-            <img
-              src={getPlaybackIcon()}
-              alt={playbackState}
-              className="h-7 w-7 shrink-0 sm:h-8 sm:w-8"
-            />
+            <PlaybackIcon />
           </motion.a>
         ) : null}
         {/* Progress bar at the bottom */}
@@ -217,12 +225,7 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
                 Not playing
               </p>
             </div>
-            {/* Offline Icon on the right */}
-            <img
-              src={getPlaybackIcon()}
-              alt="offline"
-              className="h-7 w-7 shrink-0 sm:h-8 sm:w-8"
-            />
+            <PlaybackIcon />
           </div>
         )}
       </div>
@@ -264,12 +267,7 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
               {track.artist}
             </p>
           </div>
-          {/* Playback Icon on the right */}
-          <img
-            src={getPlaybackIcon()}
-            alt={playbackState}
-            className="h-7 w-7 shrink-0 sm:h-8 sm:w-8"
-          />
+          <PlaybackIcon />
         </motion.a>
       ) : null}
       {/* Progress bar at the bottom */}
@@ -303,12 +301,7 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
               Not playing
             </p>
           </div>
-          {/* Offline Icon on the right */}
-          <img
-            src={getPlaybackIcon()}
-            alt="offline"
-            className="h-7 w-7 shrink-0 sm:h-8 sm:w-8"
-          />
+          <PlaybackIcon />
         </div>
       )}
     </div>

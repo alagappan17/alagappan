@@ -512,7 +512,7 @@ export function ConnectSection({ theme, socialLinks }: ConnectSectionProps) {
             {/* 3D Object Container */}
             <div className="h-[250px] w-full sm:h-[300px] md:h-[320px]">
               <Suspense fallback={<ThreeObjectFallback />}>
-                <ThreeObject themeId="liquidGlass" />
+                <ThreeObject themeId="brutalism" />
               </Suspense>
             </div>
 

@@ -135,8 +135,6 @@ export function SectionSelector({
   const hoverLabelThemeStyles: Record<string, string> = {
     brutalism:
       'rounded-xl border-[3px] border-black bg-[#FCEE4B] px-3 py-1 text-[0.7rem] font-black uppercase tracking-[0.22em] text-[#111] shadow-[4px_4px_0_0_#111] md:px-4 md:py-1.5 md:text-xs',
-    liquidGlass:
-      'rounded-xl border border-white/40 bg-white/20 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-slate-800 shadow-[0_6px_24px_0_rgba(0,0,0,0.3),0_0_0_0.5px_rgba(255,255,255,0.2)_inset] backdrop-blur-xl md:px-4 md:py-1.5 md:text-xs md:shadow-[0_8px_32px_0_rgba(0,0,0,0.3),0_0_0_0.5px_rgba(255,255,255,0.25)_inset]',
   }
 
   return (
@@ -145,69 +143,28 @@ export function SectionSelector({
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className={`flex items-center gap-2.5 md:flex-col md:gap-3 ${
-          themeId === 'brutalism' ? '' : 'md:mix-blend-difference'
-        }`}>
+        className="flex items-center gap-2.5 md:flex-col md:gap-3">
         {sections.map((section) => {
           const isActive = activeSection === section.id
 
-          if (themeId === 'brutalism') {
-            return (
-              <motion.button
-                key={section.id}
-                onClick={() => handleSectionClick(section.id)}
-                className={`group relative flex h-14 w-14 items-center justify-center rounded-xl border-[3px] border-black transition-all duration-300 md:h-16 md:w-16 md:rounded-2xl md:border-4 ${
-                  isActive
-                    ? 'bg-[#10B981] shadow-[5px_5px_0_0_#111] scale-110 md:shadow-[8px_8px_0_0_#111]'
-                    : 'bg-white/80 shadow-[3px_3px_0_0_#111] hover:shadow-[4px_4px_0_0_#111] md:shadow-[4px_4px_0_0_#111] md:hover:shadow-[6px_6px_0_0_#111]'
-                }`}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label={`Navigate to ${section.label} section`}
-                type="button">
-                <div className="text-[#111] opacity-100">{section.icon}</div>
-                <span
-                  aria-hidden="true"
-                  className={`${hoverLabelBaseClasses} ${
-                    hoverLabelThemeStyles[themeId]
-                  } ${
-                    tooltipSection === section.id
-                      ? 'opacity-100 translate-y-0 scale-100'
-                      : ''
-                  }`}>
-                  {section.label}
-                </span>
-                {isActive && (
-                  <motion.div
-                    layoutId="section-indicator"
-                    className="absolute inset-0 rounded-xl border-[3px] border-black md:rounded-2xl md:border-4"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    initial={false}
-                  />
-                )}
-              </motion.button>
-            )
-          }
-
-          // Liquid Glass theme
           return (
             <motion.button
               key={section.id}
               onClick={() => handleSectionClick(section.id)}
-              className={`group relative flex h-14 w-14 items-center justify-center rounded-xl border transition-all duration-300 md:h-16 md:w-16 md:rounded-2xl ${
+              className={`group relative flex h-14 w-14 items-center justify-center rounded-xl border-[3px] border-black transition-all duration-300 md:h-16 md:w-16 md:rounded-2xl md:border-4 ${
                 isActive
-                  ? 'border-emerald-400/60 bg-emerald-500/20 shadow-[0_6px_24px_0_rgba(16,185,129,0.4)] backdrop-blur-xl scale-110 md:shadow-[0_8px_32px_0_rgba(16,185,129,0.4)]'
-                  : 'border-black/40 bg-white/60 shadow-[3px_3px_0_0_rgba(0,0,0,0.2)] backdrop-blur-sm hover:shadow-[4px_4px_0_0_rgba(0,0,0,0.3)] md:shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] md:hover:shadow-[6px_6px_0_0_rgba(0,0,0,0.3)]'
+                  ? 'bg-[#10B981] shadow-[5px_5px_0_0_#111] scale-110 md:shadow-[8px_8px_0_0_#111]'
+                  : 'bg-white/80 shadow-[3px_3px_0_0_#111] hover:shadow-[4px_4px_0_0_#111] md:shadow-[4px_4px_0_0_#111] md:hover:shadow-[6px_6px_0_0_#111]'
               }`}
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               aria-label={`Navigate to ${section.label} section`}
               type="button">
-              <div className="text-slate-800 opacity-100 md:mix-blend-normal">{section.icon}</div>
+              <div className="text-[#111] opacity-100">{section.icon}</div>
               <span
                 aria-hidden="true"
                 className={`${hoverLabelBaseClasses} ${
-                  hoverLabelThemeStyles[themeId]
+                  hoverLabelThemeStyles.brutalism
                 } ${
                   tooltipSection === section.id
                     ? 'opacity-100 translate-y-0 scale-100'
@@ -217,8 +174,8 @@ export function SectionSelector({
               </span>
               {isActive && (
                 <motion.div
-                  layoutId="section-indicator-glass"
-                  className="absolute inset-0 rounded-xl border-2 border-emerald-400/70 md:rounded-2xl"
+                  layoutId="section-indicator"
+                  className="absolute inset-0 rounded-xl border-[3px] border-black md:rounded-2xl md:border-4"
                   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   initial={false}
                 />

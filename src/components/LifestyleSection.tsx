@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { type ThemeConfig } from '../themes/types'
 import { type LifestyleItem } from '../content/personal-info'
 import { LazyImage } from './LazyImage'
@@ -26,16 +26,6 @@ export function LifestyleSection({
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
-
-  // Parallax scroll effects
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  })
-
-  const y1 = useTransform(scrollYProgress, [0, 1], [30, -30])
-  const y2 = useTransform(scrollYProgress, [0, 1], [-20, 20])
-  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 180])
 
   if (isBrutalism) {
     return (
@@ -157,24 +147,10 @@ export function LifestyleSection({
           </div>
         </div>
 
-        {/* Decorative background shapes */}
-        <div className="pointer-events-none absolute inset-0 z-5 overflow-hidden">
-          <motion.div
-            className="absolute right-[8%] top-[15%] h-12 w-12 rounded-full border-[3px] border-black bg-[#FF6F91] opacity-20 sm:h-16 sm:w-16 md:h-20 md:w-20"
-            style={{ y: y1, rotate: rotate1 }}
-          />
-          <motion.div
-            className="absolute left-[12%] bottom-[20%] h-10 w-10 rotate-45 border-[3px] border-black bg-[#FCEE4B] opacity-20 sm:h-14 sm:w-14 md:h-18 md:w-18"
-            style={{ y: y2 }}
-          />
-          <motion.div
-            className="absolute right-[15%] bottom-[12%] h-16 w-16 border-[3px] border-black bg-[#2EC4B6] opacity-15 sm:h-20 sm:w-20 md:h-24 md:w-24"
-            style={{
-              y: y1,
-              rotate: rotate1,
-              clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
-            }}
-          />
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-5 overflow-hidden">
+          <div className="brutalism-float-4 absolute right-[8%] top-[15%] h-12 w-12 rounded-full border-[3px] border-black bg-[#FF6F91] opacity-20 sm:h-16 sm:w-16 md:h-20 md:w-20" style={{ willChange: 'transform' }} />
+          <div className="brutalism-float-5 absolute left-[12%] bottom-[20%] h-10 w-10 rotate-45 border-[3px] border-black bg-[#FCEE4B] opacity-20 sm:h-14 sm:w-14 md:h-18 md:w-18" style={{ willChange: 'transform' }} />
+          <div className="brutalism-float-1 absolute right-[15%] bottom-[12%] h-16 w-16 border-[3px] border-black bg-[#2EC4B6] opacity-15 sm:h-20 sm:w-20 md:h-24 md:w-24" style={{ willChange: 'transform', clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)', animationDelay: '-8s' }} />
         </div>
       </div>
     )

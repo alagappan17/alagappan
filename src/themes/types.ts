@@ -115,5 +115,5 @@ export interface ThemeConfig {
   animations: ThemeAnimations
   interactionConfig: InteractionConfig
   mobileConfig: MobileConfig
-  BackgroundComponent: ComponentType<{ isMobile: boolean; scrollProgress?: any }>
+  BackgroundComponent: ComponentType<{ isMobile: boolean }>
 }

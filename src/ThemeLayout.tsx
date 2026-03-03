@@ -1,5 +1,5 @@
 import { useEffect, useState, lazy, Suspense } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { type ThemeConfig } from './themes/types'
 import { personalInfo } from './content/personal-info'
 import { ProfileCard } from './components/ProfileCard'
@@ -55,9 +55,6 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
       typeof navigator !== 'undefined' ? navigator.maxTouchPoints > 1 : false
     return window.innerWidth <= 768 || touchDevice
   })
-  const { scrollY } = useScroll()
-  const scrollProgress = useTransform(scrollY, [0, 1000], [0, 1])
-
   useEffect(() => {
     if (typeof window === 'undefined') return
     const mediaQuery = window.matchMedia('(max-width: 768px)')
@@ -272,11 +269,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         id="section-home"
         className={firstScreenClasses}
         style={getContainerStyle()}>
-        <theme.BackgroundComponent
-          isMobile={isMobile}
-          scrollProgress={scrollProgress}
-        />
-
+        <theme.BackgroundComponent isMobile={isMobile} />
         <ProfileCard theme={theme} isMobile={isMobile}>
           <Badge text={personalInfo.badge.text} theme={theme} />
 
@@ -320,11 +313,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         id="section-about"
         className={secondScreenClasses}
         style={getSecondScreenStyle()}>
-        <theme.BackgroundComponent
-          isMobile={isMobile}
-          scrollProgress={scrollProgress}
-        />
-
+        <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
           <Suspense fallback={<SectionFallback />}>
             <motion.div
@@ -346,11 +335,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         id="section-journey"
         className={thirdScreenClasses}
         style={getThirdScreenStyle()}>
-        <theme.BackgroundComponent
-          isMobile={isMobile}
-          scrollProgress={scrollProgress}
-        />
-
+        <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
           <Suspense fallback={<SectionFallback />}>
             <motion.div
@@ -374,11 +359,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         id="section-artworks"
         className={fourthScreenClasses}
         style={getFourthScreenStyle()}>
-        <theme.BackgroundComponent
-          isMobile={isMobile}
-          scrollProgress={scrollProgress}
-        />
-
+        <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
           <Suspense fallback={<SectionFallback />}>
             <motion.div
@@ -397,11 +378,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         id="section-lifestyle"
         className={lifestyleScreenClasses}
         style={getLifestyleScreenStyle()}>
-        <theme.BackgroundComponent
-          isMobile={isMobile}
-          scrollProgress={scrollProgress}
-        />
-
+        <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
           <Suspense fallback={<SectionFallback />}>
             <motion.div
@@ -423,11 +400,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         id="section-connect"
         className={fifthScreenClasses}
         style={getFifthScreenStyle()}>
-        <theme.BackgroundComponent
-          isMobile={isMobile}
-          scrollProgress={scrollProgress}
-        />
-
+        <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
           <Suspense fallback={<SectionFallback />}>
             <motion.div

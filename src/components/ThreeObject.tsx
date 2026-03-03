@@ -10,7 +10,7 @@ import * as THREE from 'three'
 import { useSpotifyPlaying } from '../hooks/useSpotifyPlaying'
 
 interface ThreeObjectProps {
-  themeId: 'brutalism' | 'liquidGlass'
+  themeId: 'brutalism'
 }
 
 interface RotatingObjectProps {
@@ -330,19 +330,10 @@ export function ThreeObject({ themeId }: ThreeObjectProps) {
         <PerspectiveCamera makeDefault position={[0, 0, 1.35]} fov={20} />
 
         {/* Improved lighting setup */}
-        <ambientLight intensity={themeId === 'brutalism' ? 1.2 : 0.8} />
+        <ambientLight intensity={1.2} />
         <directionalLight position={[5, 5, 5]} intensity={1.5} castShadow />
         <directionalLight position={[-5, 3, -5]} intensity={0.8} />
         <pointLight position={[0, 5, 0]} intensity={0.6} />
-        {themeId === 'liquidGlass' && (
-          <spotLight
-            position={[0, 8, 2]}
-            angle={0.4}
-            penumbra={0.5}
-            intensity={1.2}
-            castShadow
-          />
-        )}
         {themeId === 'brutalism' && <BrutalistBackground />}
         {/* Use key prop to force re-mount when model changes for smooth switching */}
         <RotatingObject key={modelPath} modelPath={modelPath} />
@@ -356,21 +347,11 @@ export function ThreeObject({ themeId }: ThreeObjectProps) {
       </Canvas>
 
       {/* Label - yellow badge, positioned at bottom right */}
-      {themeId === 'brutalism' && (
-        <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
-          <div className="inline-block rounded-md border-[2.5px] border-black bg-[#FCEE4B] px-1.5 py-0.5 text-[0.6rem] font-black uppercase tracking-wider text-[#111] shadow-[3px_3px_0_0_#111] sm:text-xs sm:px-2 sm:py-1">
-            Drag to Rotate
-          </div>
+      <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
+        <div className="inline-block rounded-md border-[2.5px] border-black bg-[#FCEE4B] px-1.5 py-0.5 text-[0.6rem] font-black uppercase tracking-wider text-[#111] shadow-[3px_3px_0_0_#111] sm:text-xs sm:px-2 sm:py-1">
+          Drag to Rotate
         </div>
-      )}
-
-      {themeId === 'liquidGlass' && (
-        <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10">
-          <div className="inline-block rounded-md border border-white/40 bg-amber-400/30 px-1.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wider text-amber-50 backdrop-blur-sm shadow-[0_4px_16px_0_rgba(0,0,0,0.2)] sm:text-xs sm:px-2 sm:py-1">
-            Drag to Rotate
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   )
 }
