@@ -143,8 +143,16 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
     }
     return (
       <img
-        src={playbackState === 'paused' ? '/playback/pause.png' : '/playback/offline.png'}
+        src={
+          playbackState === 'paused'
+            ? '/playback/optimized/pause.webp'
+            : '/playback/optimized/offline.webp'
+        }
         alt={playbackState}
+        width={32}
+        height={32}
+        loading="lazy"
+        decoding="async"
         className={`shrink-0 ${className}`}
       />
     )

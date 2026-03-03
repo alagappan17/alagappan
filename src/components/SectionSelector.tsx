@@ -23,9 +23,13 @@ export function SectionSelector({ activeSection }: SectionSelectorProps) {
       label: 'Home',
       icon: (
         <img
-          src="/icons/landing.png"
+          src="/icons/optimized/landing.webp"
           alt="Home"
+          width={35}
+          height={35}
           className="h-5 w-5 md:h-6 md:w-6"
+          loading="lazy"
+          decoding="async"
         />
       ),
     },
@@ -34,9 +38,13 @@ export function SectionSelector({ activeSection }: SectionSelectorProps) {
       label: 'About',
       icon: (
         <img
-          src="/icons/about.png"
+          src="/icons/optimized/about.webp"
           alt="About"
+          width={35}
+          height={35}
           className="h-5 w-5 md:h-6 md:w-6"
+          loading="lazy"
+          decoding="async"
         />
       ),
     },
@@ -44,14 +52,30 @@ export function SectionSelector({ activeSection }: SectionSelectorProps) {
       id: 'journey',
       label: 'Dev',
       icon: (
-        <img src="/icons/dev.png" alt="Dev" className="h-5 w-5 md:h-6 md:w-6" />
+        <img
+          src="/icons/optimized/dev.webp"
+          alt="Dev"
+          width={35}
+          height={35}
+          className="h-5 w-5 md:h-6 md:w-6"
+          loading="lazy"
+          decoding="async"
+        />
       ),
     },
     {
       id: 'artworks',
       label: 'Art',
       icon: (
-        <img src="/icons/art.png" alt="Art" className="h-5 w-5 md:h-6 md:w-6" />
+        <img
+          src="/icons/optimized/art.webp"
+          alt="Art"
+          width={35}
+          height={35}
+          className="h-5 w-5 md:h-6 md:w-6"
+          loading="lazy"
+          decoding="async"
+        />
       ),
     },
     {

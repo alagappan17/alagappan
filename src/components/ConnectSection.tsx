@@ -78,12 +78,20 @@ export function ConnectSection({ theme, socialLinks }: ConnectSectionProps) {
   const getSocialIcon = (iconName: string) => {
     const icon = iconName.toLowerCase()
 
-    // Map email to mail.png
+    // Map email to mail icon
     const iconFile = icon === 'email' ? 'mail' : icon
-    const iconPath = `/social/${iconFile}.png`
+    const iconPath = `/social/optimized/${iconFile}.webp`
 
     return (
-      <img src={iconPath} alt={iconName} className="h-6 w-6" loading="lazy" />
+      <img
+        src={iconPath}
+        alt={iconName}
+        width={32}
+        height={32}
+        className="h-6 w-6"
+        loading="lazy"
+        decoding="async"
+      />
     )
   }
 
@@ -366,8 +374,12 @@ export function ConnectSection({ theme, socialLinks }: ConnectSectionProps) {
                         style={{ backgroundColor: '#FF8C42' }}
                         className="flex h-16 w-28 items-center justify-center overflow-hidden rounded-xl border-[3px] border-black shadow-[4px_4px_0_0_#111] transition-shadow hover:shadow-[6px_6px_0_0_#111] sm:h-20 sm:w-36 sm:rounded-2xl">
                         <img
-                          src="/games/ghost-of-yotei-wide.jpg"
+                          src="/games/optimized/ghost-of-yotei-wide-256.webp"
                           alt="Ghost of Yotei"
+                          width={256}
+                          height={144}
+                          loading="lazy"
+                          decoding="async"
                           className="h-full w-full object-cover"
                         />
                       </motion.div>
@@ -587,8 +599,12 @@ export function ConnectSection({ theme, socialLinks }: ConnectSectionProps) {
                   aria-label="Ghost of Yotei"
                   title="Ghost of Yotei">
                   <img
-                    src="/games/ghost-of-yotei-wide.jpg"
+                    src="/games/optimized/ghost-of-yotei-wide-256.webp"
                     alt="Ghost of Yotei"
+                    width={256}
+                    height={144}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                   {/* Tooltip */}

@@ -10,31 +10,31 @@ interface IntroductionSectionProps {
 
 // Dev tools - Primary Stack
 const primaryStack: TechStackItem[] = [
-  { name: 'TypeScript', logoUrl: '/stack/TypeScript.png' },
-  { name: 'React', logoUrl: '/stack/React.png' },
-  { name: 'Material UI', logoUrl: '/stack/Material UI.png' },
-  { name: 'Node', logoUrl: '/stack/Node.js.png' },
-  { name: 'Mongo', logoUrl: '/stack/MongoDB.png' },
-  { name: 'Koa', logoUrl: '/stack/Koa.png' },
-  { name: 'Docker', logoUrl: '/stack/Docker.png' },
-  { name: 'AWS', logoUrl: '/stack/AWS.png' },
+  { name: 'TypeScript', logoUrl: '/stack/optimized/TypeScript.webp' },
+  { name: 'React', logoUrl: '/stack/optimized/React.webp' },
+  { name: 'Material UI', logoUrl: '/stack/optimized/MaterialUI.webp' },
+  { name: 'Node', logoUrl: '/stack/optimized/Node.js.webp' },
+  { name: 'Mongo', logoUrl: '/stack/optimized/MongoDB.webp' },
+  { name: 'Koa', logoUrl: '/stack/optimized/Koa.webp' },
+  { name: 'Docker', logoUrl: '/stack/optimized/Docker.webp' },
+  { name: 'AWS', logoUrl: '/stack/optimized/AWS.webp' },
 ]
 
 // Dev tools - Tool Stack
 const toolStack: TechStackItem[] = [
-  { name: 'Cursor', logoUrl: '/stack/Cursor.png' },
-  { name: 'Claude', logoUrl: '/stack/Claude.png' },
-  { name: 'Comet', logoUrl: '/stack/Comet.jpg' },
-  { name: 'CodeRabbit', logoUrl: '/stack/Coderabbit.png' },
-  { name: 'Excalidraw', logoUrl: '/stack/Excalidraw.png' },
-  { name: 'Notion', logoUrl: '/stack/Notion.png' },
+  { name: 'Cursor', logoUrl: '/stack/optimized/Cursor.webp' },
+  { name: 'Claude', logoUrl: '/stack/optimized/Claude.webp' },
+  { name: 'Comet', logoUrl: '/stack/optimized/Comet.webp' },
+  { name: 'CodeRabbit', logoUrl: '/stack/optimized/Coderabbit.webp' },
+  { name: 'Excalidraw', logoUrl: '/stack/optimized/Excalidraw.webp' },
+  { name: 'Notion', logoUrl: '/stack/optimized/Notion.webp' },
 ]
 
 // Creative tools
 const creativeTools: TechStackItem[] = [
-  { name: 'Blender', logoUrl: '/stack/Blender.png' },
-  { name: 'DaVinci', logoUrl: '/stack/Davinci.png' },
-  { name: 'Figma', logoUrl: '/stack/Figma.png' },
+  { name: 'Blender', logoUrl: '/stack/optimized/Blender.webp' },
+  { name: 'DaVinci', logoUrl: '/stack/optimized/Davinci.webp' },
+  { name: 'Figma', logoUrl: '/stack/optimized/Figma.webp' },
 ]
 
 function highlightSkidrrow(text: string): React.ReactNode {
