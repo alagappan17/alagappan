@@ -247,7 +247,7 @@ function App() {
   return (
     <div className="relative w-full overflow-x-hidden">
       {/* Section Selector */}
-      <SectionSelector themeId={themeId} activeSection={activeSection} />
+      <SectionSelector activeSection={activeSection} />
 
       {/* Theme Picker */}
       <div className="fixed top-6 left-0 right-0 z-50 flex justify-center md:bottom-auto md:left-6 md:right-auto md:top-1/2 md:justify-start md:-translate-y-1/2">

@@ -10,14 +10,10 @@ interface Section {
 }
 
 interface SectionSelectorProps {
-  themeId: string
   activeSection: SectionId
 }
 
-export function SectionSelector({
-  themeId,
-  activeSection,
-}: SectionSelectorProps) {
+export function SectionSelector({ activeSection }: SectionSelectorProps) {
   const [tooltipSection, setTooltipSection] = useState<SectionId | null>(null)
   const hideTooltipTimeout = useRef<number | null>(null)
 
