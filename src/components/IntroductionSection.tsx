@@ -122,7 +122,7 @@ export function IntroductionSection({
             <div className="relative rounded-2xl border-[3px] border-black bg-white p-3 shadow-[6px_6px_0_0_#111] sm:rounded-3xl sm:border-4 sm:p-4 md:p-5 -rotate-[1deg]">
               <div className="relative overflow-hidden rounded-xl border-[2.5px] border-black sm:rounded-2xl">
                 <img
-                  src="/profile.jpeg"
+                  src="/profile.webp"
                   alt="Profile"
                   className="h-32 w-32 object-cover sm:h-40 sm:w-40 md:h-48 md:w-48"
                   loading="lazy"
@@ -494,7 +494,7 @@ export function IntroductionSection({
           <div className="relative rounded-[1.5rem] border border-white/20 bg-white/10 p-3 shadow-[0_8px_32px_0_rgba(0,0,0,0.15),0_0_0_1px_rgba(255,255,255,0.1)_inset] backdrop-blur-[24px] sm:rounded-[2rem] sm:p-4 md:p-5">
             <div className="relative overflow-hidden rounded-xl border border-white/30 sm:rounded-2xl">
               <img
-                src="/profile.jpeg"
+                src="/profile.webp"
                 alt="Profile"
                 className="h-32 w-32 object-cover sm:h-40 sm:w-40 md:h-48 md:w-48"
                 loading="lazy"

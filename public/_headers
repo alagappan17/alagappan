@@ -1,0 +1,29 @@
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.glb
+  Cache-Control: public, max-age=604800
+
+/artworks/*
+  Cache-Control: public, max-age=604800
+
+/lifestyle/*
+  Cache-Control: public, max-age=604800
+
+/stack/*
+  Cache-Control: public, max-age=604800
+
+/experience/*
+  Cache-Control: public, max-age=604800
+
+/social/*
+  Cache-Control: public, max-age=604800
+
+/icons/*
+  Cache-Control: public, max-age=604800
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/sw.js
+  Cache-Control: no-cache
