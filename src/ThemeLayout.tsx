@@ -259,8 +259,8 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
 
   const fifthScreenClasses =
     theme.id === 'brutalism'
-      ? 'relative min-h-screen w-full overflow-hidden px-4 py-20 text-[#111] sm:px-6 sm:py-24 md:min-h-0 md:px-12 md:py-16 lg:px-16 lg:py-20'
-      : 'relative min-h-screen w-full overflow-hidden px-4 py-20 bg-[#F5F5FA] text-slate-900 sm:px-6 sm:py-24 md:min-h-0 md:px-12 md:py-16 lg:px-16 lg:py-20'
+      ? 'relative min-h-screen w-full overflow-hidden px-4 pt-20 pb-40 text-[#111] sm:px-6 sm:pt-24 sm:pb-48 md:min-h-0 md:px-12 md:pt-16 md:pb-40 lg:px-16 lg:pt-20 lg:pb-48'
+      : 'relative min-h-screen w-full overflow-hidden px-4 pt-20 pb-40 bg-[#F5F5FA] text-slate-900 sm:px-6 sm:pt-24 sm:pb-48 md:min-h-0 md:px-12 md:pt-16 md:pb-40 lg:px-16 lg:pt-20 lg:pb-48'
 
   return (
     <>
