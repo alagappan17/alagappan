@@ -3,6 +3,8 @@
 const TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token'
 const NOW_PLAYING_ENDPOINT =
   'https://api.spotify.com/v1/me/player/currently-playing'
+const TOP_ARTISTS_ENDPOINT =
+  'https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=5'
 
 const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID
 const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
@@ -19,13 +21,21 @@ export interface SpotifyTrack {
   durationMs: number
 }
 
+export interface SpotifyArtist {
+  id: string
+  name: string
+  url: string
+  imageUrl: string
+  genres: string[]
+}
+
 /**
  * Get a new access token using the refresh token
  */
 export async function getAccessToken(): Promise<string | null> {
   if (!clientId || !clientSecret || !refreshToken) {
     console.error(
-      'Spotify credentials are missing. Please check your environment variables.'
+      'Spotify credentials are missing. Please check your environment variables.',
     )
     return null
   }
@@ -96,7 +106,7 @@ export async function getNowPlaying(): Promise<SpotifyTrack | null> {
     // Get the smallest album image (usually 64x64 or 300x300)
     const albumImage =
       track.album?.images?.find(
-        (img: { height: number }) => img.height <= 300
+        (img: { height: number }) => img.height <= 300,
       ) ||
       track.album?.images?.[track.album.images.length - 1] ||
       null
@@ -119,5 +129,55 @@ export async function getNowPlaying(): Promise<SpotifyTrack | null> {
   } catch (error) {
     console.error('Error getting now playing:', error)
     return null
+  }
+}
+
+/**
+ * Get top artists from Spotify
+ */
+export async function getTopArtists(): Promise<SpotifyArtist[]> {
+  const accessToken = await getAccessToken()
+
+  if (!accessToken) {
+    return []
+  }
+
+  try {
+    const response = await fetch(TOP_ARTISTS_ENDPOINT, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      console.error('Failed to get top artists:', errorData)
+      return []
+    }
+
+    const data = await response.json()
+
+    if (!data.items || !Array.isArray(data.items)) {
+      return []
+    }
+
+    return data.items.map((artist: any) => {
+      // Get the smallest image that is at least 64px, or the last one
+      const image =
+        artist.images?.find((img: { height: number }) => img.height >= 64) ||
+        artist.images?.[artist.images.length - 1] ||
+        null
+
+      return {
+        id: artist.id,
+        name: artist.name,
+        url: artist.external_urls?.spotify || '#',
+        imageUrl: image?.url || '',
+        genres: artist.genres || [],
+      }
+    })
+  } catch (error) {
+    console.error('Error getting top artists:', error)
+    return []
   }
 }

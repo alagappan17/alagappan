@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { type ThemeConfig } from '../themes/types'
-import { getNowPlaying, type SpotifyTrack } from '../utils/spotify'
+import { getNowPlaying, getTopArtists, type SpotifyTrack, type SpotifyArtist } from '../utils/spotify'
 
 interface SpotifyNowPlayingProps {
   theme: ThemeConfig
@@ -15,9 +15,19 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
   const [track, setTrack] = useState<SpotifyTrack | null>(null)
   const trackRef = useRef<SpotifyTrack | null>(null)
   const [currentProgress, setCurrentProgress] = useState(0)
-  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
-    null
-  )
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const [topArtists, setTopArtists] = useState<SpotifyArtist[]>([])
+  const [isHovered, setIsHovered] = useState(false)
+  const hoverTimerRef = useRef<number | null>(null)
+
+  const handleMouseEnter = () => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current)
+    setIsHovered(true)
+  }
+  const handleMouseLeave = () => {
+    hoverTimerRef.current = setTimeout(() => setIsHovered(false), 200)
+  }
 
   // Fetch now playing data
   useEffect(() => {
@@ -29,7 +39,14 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
         setIsLoading(true)
       }
       try {
-        const nowPlaying = await getNowPlaying()
+        const [nowPlaying, artistsData] = await Promise.all([
+          getNowPlaying(),
+          isInitialLoad ? getTopArtists() : Promise.resolve(null)
+        ])
+
+        if (isInitialLoad && artistsData) {
+          setTopArtists(artistsData)
+        }
 
         // Only update if data actually changed
         if (isInitialLoad) {
@@ -166,7 +183,12 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
 
   if (isBrutalism) {
     return (
-      <div className="relative rounded-xl border-[3px] border-black bg-white p-2.5 shadow-[4px_4px_0_0_#111] sm:rounded-2xl sm:p-3 overflow-hidden">
+      <div 
+        className="relative h-full w-full"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className="relative h-full rounded-xl border-[3px] border-black bg-white p-2.5 shadow-[4px_4px_0_0_#111] sm:rounded-2xl sm:p-3 overflow-hidden">
         {isLoading ? (
           <div className="flex items-center gap-2.5">
             <div className="h-10 w-10 animate-pulse rounded border-[2px] border-black bg-[#FFFBF3] shadow-[2px_2px_0_0_#111] sm:h-12 sm:w-12" />
@@ -176,11 +198,7 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
             </div>
           </div>
         ) : track ? (
-          <motion.a
-            href={track.songUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.02, y: -2 }}
+          <div
             className="flex items-center gap-2.5 transition-all">
             {/* Cover Image */}
             <motion.img
@@ -200,7 +218,7 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
               </p>
             </div>
             <PlaybackIcon />
-          </motion.a>
+          </div>
         ) : null}
         {/* Progress bar at the bottom */}
         {track && (
@@ -237,12 +255,59 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
           </div>
         )}
       </div>
+
+        <AnimatePresence>
+          {isHovered && topArtists.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.2, type: 'spring', stiffness: 300, damping: 25 }}
+              className="absolute left-0 bottom-full z-50 mb-3 w-64 rounded-xl border-[3px] border-black bg-white p-4 shadow-[6px_6px_0_0_#111] sm:w-72"
+            >
+              <h4 className="mb-3 text-xs font-black uppercase tracking-wider text-[#999]">
+                Top 5 Artists (All Time)
+              </h4>
+              <div className="space-y-3">
+                {topArtists.map((artist, i) => (
+                  <a
+                    key={artist.id}
+                    href={artist.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 transition-transform hover:-translate-y-0.5"
+                  >
+                    <span className="text-sm font-black text-[#CCC] w-4">{i + 1}</span>
+                    <img
+                      src={artist.imageUrl}
+                      alt={artist.name}
+                      className="h-10 w-10 shrink-0 rounded-full border-[2px] border-black object-cover shadow-[2px_2px_0_0_#111]"
+                    />
+                    <div className="flex flex-col overflow-hidden">
+                      <p className="text-xs font-black text-[#111] truncate">
+                        {artist.name}
+                      </p>
+                      <p className="text-[0.6rem] font-bold uppercase tracking-wider text-[#999] truncate mt-0.5">
+                        {artist.genres.slice(0, 2).join(' · ')}
+                      </p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     )
   }
-
   // Liquid Glass Theme
   return (
-    <div className="relative rounded-xl border border-white/30 bg-white/10 p-2.5 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] sm:rounded-2xl sm:p-3 overflow-hidden">
+    <div 
+      className="relative h-full w-full"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="relative h-full rounded-xl border border-white/30 bg-white/10 p-2.5 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] sm:rounded-2xl sm:p-3 overflow-hidden">
       {isLoading ? (
         <div className="flex items-center gap-2.5">
           <div className="h-10 w-10 animate-pulse rounded-lg border border-white/40 bg-white/10 shadow-[0_2px_8px_0_rgba(0,0,0,0.2)] sm:h-12 sm:w-12" />
@@ -252,11 +317,7 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
           </div>
         </div>
       ) : track ? (
-        <motion.a
-          href={track.songUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          whileHover={{ scale: 1.02, y: -2 }}
+        <div
           className="flex items-center gap-2.5 transition-all">
           {/* Cover Image */}
           <motion.img
@@ -276,7 +337,7 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
             </p>
           </div>
           <PlaybackIcon />
-        </motion.a>
+        </div>
       ) : null}
       {/* Progress bar at the bottom */}
       {track && (
@@ -312,6 +373,49 @@ export function SpotifyNowPlaying({ theme }: SpotifyNowPlayingProps) {
           <PlaybackIcon />
         </div>
       )}
+      </div>
+
+      <AnimatePresence>
+        {isHovered && topArtists.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute left-0 bottom-full z-50 mb-3 w-64 rounded-xl border border-white/30 bg-white/10 backdrop-blur-2xl p-4 shadow-[0_16px_40px_0_rgba(0,0,0,0.3)] sm:w-72"
+          >
+            <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Top 5 Artists (All Time)
+            </h4>
+            <div className="space-y-3">
+              {topArtists.map((artist, i) => (
+                <a
+                  key={artist.id}
+                  href={artist.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 transition-transform hover:-translate-y-0.5"
+                >
+                  <span className="text-sm font-bold text-slate-500 w-4">{i + 1}</span>
+                  <img
+                    src={artist.imageUrl}
+                    alt={artist.name}
+                    className="h-10 w-10 shrink-0 rounded-full border border-white/30 object-cover shadow-sm"
+                  />
+                  <div className="flex flex-col overflow-hidden">
+                    <p className="text-xs font-medium text-slate-200 truncate">
+                      {artist.name}
+                    </p>
+                    <p className="text-[0.6rem] font-medium uppercase tracking-wider text-slate-500 truncate mt-0.5">
+                      {artist.genres.slice(0, 2).join(' · ')}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
