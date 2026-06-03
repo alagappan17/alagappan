@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { type ThemeConfig } from '../themes/types'
 import { type LifestyleItem } from '../content/personal-info'
 import { LazyImage } from './LazyImage'
-
 interface LifestyleSectionProps {
   lifestyleItems: LifestyleItem[]
   theme: ThemeConfig
@@ -157,5 +156,9 @@ export function LifestyleSection({
   }
 
   // Placeholder for other themes
-  return <div>Lifestyle section - theme not implemented</div>
+  return (
+    <div className="relative w-full space-y-8">
+      <div>Lifestyle section - theme not implemented</div>
+    </div>
+  )
 }

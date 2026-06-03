@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import emailjs from '@emailjs/browser'
 import { type ThemeConfig } from '../themes/types'
 import { SpotifyNowPlaying } from './SpotifyNowPlaying'
+import { StravaInteractive } from './StravaInteractive'
 
 const ThreeObject = lazy(() =>
   import('./ThreeObject').then((m) => ({ default: m.ThreeObject }))
@@ -341,67 +342,15 @@ export function ConnectSection({ theme, socialLinks }: ConnectSectionProps) {
                   Now playing
                 </h4>
 
-                <div className="flex flex-row gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   {/* Mobile Order: 3. Spotify */}
                   <div className="flex-1 min-w-0">
                     <SpotifyNowPlaying theme={theme} />
                   </div>
 
-                  {/* Mobile Order: 4. Games */}
-                  <div className="flex-shrink-0">
-                    <motion.div
-                      key="ghost-of-yotei"
-                      initial={{ opacity: 0, scale: 0.5, y: 20 }}
-                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-50px' }}
-                      transition={{
-                        delay: 0.7,
-                        duration: 0.5,
-                        type: 'spring',
-                        stiffness: 180,
-                        damping: 14,
-                      }}
-                      onHoverStart={() => setHoveredSocialIndex(100)}
-                      onHoverEnd={() => setHoveredSocialIndex(null)}
-                      className="relative">
-                      <motion.div
-                        whileHover={{
-                          scale: 1.15,
-                          rotate: 5,
-                          y: -8,
-                        }}
-                        whileTap={{ scale: 0.95 }}
-                        style={{ backgroundColor: '#FF8C42' }}
-                        className="flex h-16 w-28 items-center justify-center overflow-hidden rounded-xl border-[3px] border-black shadow-[4px_4px_0_0_#111] transition-shadow hover:shadow-[6px_6px_0_0_#111] sm:h-20 sm:w-36 sm:rounded-2xl">
-                        <img
-                          src="/games/optimized/ghost-of-yotei-wide-256.webp"
-                          alt="Ghost of Yotei"
-                          width={256}
-                          height={144}
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover"
-                        />
-                      </motion.div>
-                      {/* Tooltip */}
-                      <motion.div
-                        initial={{ opacity: 0, y: 5, scale: 0.8 }}
-                        animate={{
-                          opacity: hoveredSocialIndex === 100 ? 1 : 0,
-                          y: hoveredSocialIndex === 100 ? 0 : 5,
-                          scale: hoveredSocialIndex === 100 ? 1 : 0.8,
-                          rotate: hoveredSocialIndex === 100 ? -2 : 0,
-                        }}
-                        transition={{
-                          duration: 0.2,
-                          type: 'spring',
-                          stiffness: 200,
-                        }}
-                        style={{ backgroundColor: '#FF8C42' }}
-                        className="pointer-events-none absolute -bottom-12 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg border-[2.5px] border-black px-3 py-1.5 text-xs font-black uppercase tracking-wider text-white shadow-[4px_4px_0_0_#111] sm:-bottom-14 sm:px-4 sm:py-2 sm:text-sm">
-                        Ghost of Yotei
-                      </motion.div>
-                    </motion.div>
+                  {/* Mobile Order: 4. Strava */}
+                  <div className="flex-shrink-0 h-16 sm:h-20 w-full sm:w-fit">
+                    <StravaInteractive theme={theme} />
                   </div>
                 </div>
               </div>
@@ -578,53 +527,16 @@ export function ConnectSection({ theme, socialLinks }: ConnectSectionProps) {
               </h4>
 
               {/* Spotify and Games Side by Side */}
-              <div className="flex gap-3 sm:gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 {/* Spotify Integration - takes space of 3 social icons */}
                 <div className="flex-1 min-w-0">
                   <SpotifyNowPlaying theme={theme} />
                 </div>
 
-                {/* Games Section - takes space of 3 social icons */}
-                <motion.div
-                  key="ghost-of-yotei"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.7 }}
-                  whileHover={{ scale: 1.1, y: -4 }}
-                  whileTap={{ scale: 0.95 }}
-                  onHoverStart={() => setHoveredSocialIndex(100)}
-                  onHoverEnd={() => setHoveredSocialIndex(null)}
-                  className="relative flex h-16 w-28 items-center justify-center overflow-hidden rounded-xl border border-white/20 bg-amber-400/30 backdrop-blur-[20px] transition-colors hover:opacity-80 sm:h-20 sm:w-36"
-                  aria-label="Ghost of Yotei"
-                  title="Ghost of Yotei">
-                  <img
-                    src="/games/optimized/ghost-of-yotei-wide-256.webp"
-                    alt="Ghost of Yotei"
-                    width={256}
-                    height={144}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover"
-                  />
-                  {/* Tooltip */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 5, scale: 0.8 }}
-                    animate={{
-                      opacity: hoveredSocialIndex === 100 ? 1 : 0,
-                      y: hoveredSocialIndex === 100 ? 0 : 5,
-                      scale: hoveredSocialIndex === 100 ? 1 : 0.8,
-                      rotate: hoveredSocialIndex === 100 ? -2 : 0,
-                    }}
-                    transition={{
-                      duration: 0.2,
-                      type: 'spring',
-                      stiffness: 200,
-                    }}
-                    className="pointer-events-none absolute -bottom-12 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg border border-white/40 bg-amber-400/30 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-amber-50 backdrop-blur-sm shadow-[0_4px_16px_0_rgba(0,0,0,0.2)] sm:-bottom-14 sm:px-4 sm:py-2 sm:text-sm">
-                    Ghost of Yotei
-                  </motion.div>
-                </motion.div>
+                {/* Strava Section - takes space of 3 social icons */}
+                <div className="flex-shrink-0 h-16 sm:h-20 w-full sm:w-fit">
+                  <StravaInteractive theme={theme} />
+                </div>
               </div>
             </div>
           </div>
