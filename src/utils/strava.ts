@@ -147,39 +147,56 @@ export async function getStravaAccessToken(): Promise<string | null> {
 
 
 /**
- * Fetch the last 100 activities for processing the interactive cards.
+ * Fetch all runs from the last 90 days (up to 200).
+ * Uses the `after` timestamp param to filter server-side, then filters
+ * client-side to run sport types only.
+ *
+ * Used for: 90-day total distance + best run scoring.
  */
-export async function getRecentActivities(): Promise<StravaActivity[]> {
+export async function getRunsLast90Days(): Promise<StravaActivity[]> {
   const accessToken = await getStravaAccessToken()
   if (!accessToken) return []
 
+  const ninetyDaysAgoEpoch = Math.floor(
+    (Date.now() - 90 * 24 * 60 * 60 * 1000) / 1000,
+  )
+
   try {
-    const response = await fetch(`${ACTIVITIES_ENDPOINT}?per_page=100&page=1`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    })
+    const response = await fetch(
+      `${ACTIVITIES_ENDPOINT}?after=${ninetyDaysAgoEpoch}&per_page=200&page=1`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    )
     if (!response.ok) return []
-    return (await response.json()) as StravaActivity[]
+    const data = (await response.json()) as StravaActivity[]
+    // No server-side sport_type filter — filter client-side
+    return data.filter((a) => isRunActivity(a.sport_type))
   } catch {
     return []
   }
 }
 
 /**
- * Fetch only the most recent activity.
+ * Fetch only the N most recent activities for the hover-card display list.
+ * Fetches a small page to minimise payload.
  */
-export async function getLastActivity(): Promise<StravaActivity | null> {
+export async function getRecentRunsForDisplay(
+  count: number = 4,
+): Promise<StravaActivity[]> {
   const accessToken = await getStravaAccessToken()
-  if (!accessToken) return null
+  if (!accessToken) return []
 
   try {
-    const response = await fetch(`${ACTIVITIES_ENDPOINT}?per_page=1&page=1`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    })
-    if (!response.ok) return null
+    // Fetch a small buffer (3× count) so we have enough runs after filtering
+    const bufferSize = Math.min(count * 3, 30)
+    const response = await fetch(
+      `${ACTIVITIES_ENDPOINT}?per_page=${bufferSize}&page=1`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    )
+    if (!response.ok) return []
     const data = (await response.json()) as StravaActivity[]
-    return data[0] ?? null
+    return data.filter((a) => isRunActivity(a.sport_type)).slice(0, count)
   } catch {
-    return null
+    return []
   }
 }
 
@@ -203,7 +220,28 @@ export async function getAthleteStats(): Promise<StravaStats | null> {
 
 
 
-/** Format distance: meters → '10.2 km' */
+/**
+ * Find the best run from a list.
+ *
+ * Primary sort: longest distance, floored to 0.1 km (same granularity as
+ * formatDistance) so two runs that display as "10 km" are treated as equal.
+ * Tiebreaker: faster average pace (higher average_speed wins).
+ */
+export function findBestRun(runs: StravaActivity[]): StravaActivity | null {
+  if (runs.length === 0) return null
+  return [...runs].sort((a, b) => {
+    // Floor to nearest 100 m (= 0.1 km) to match what formatDistance shows
+    const distA = Math.floor(a.distance / 100)
+    const distB = Math.floor(b.distance / 100)
+    if (distB !== distA) return distB - distA
+    // Same displayed distance → faster pace wins
+    return (b.average_speed ?? 0) - (a.average_speed ?? 0)
+  })[0]
+}
+
+
+
+/** Format distance: meters → '10.2 km' (actual distance, 1 decimal place) */
 export function formatDistance(meters: number): string {
   return `${(meters / 1000).toFixed(1)} km`
 }

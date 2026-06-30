@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { type ThemeConfig } from '../themes/types'
 import {
-  getRecentActivities,
-  isRunActivity,
+  getRunsLast90Days,
+  getRecentRunsForDisplay,
+  findBestRun,
   formatDistance,
   formatRelativeDate,
   formatPace,
@@ -18,7 +19,8 @@ interface StravaInteractiveProps {
 export function StravaInteractive({ theme }: StravaInteractiveProps) {
   const isBrutalism = theme.id === 'brutalism'
   const [isLoading, setIsLoading] = useState(true)
-  const [activities, setActivities] = useState<StravaActivity[]>([])
+  const [runs90d, setRuns90d] = useState<StravaActivity[]>([])
+  const [recentRuns, setRecentRuns] = useState<StravaActivity[]>([])
 
   // Hover states
   const [hoverRun, setHoverRun] = useState(false)
@@ -30,9 +32,15 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
     let cancelled = false
     const load = async () => {
       setIsLoading(true)
-      const data = await getRecentActivities()
+      // Two targeted fetches in parallel — 90-day runs for stats/scoring,
+      // and a small recent-runs fetch for the display cards
+      const [ninetyDay, recent] = await Promise.all([
+        getRunsLast90Days(),
+        getRecentRunsForDisplay(4),
+      ])
       if (cancelled) return
-      setActivities(data)
+      setRuns90d(ninetyDay)
+      setRecentRuns(recent)
       setIsLoading(false)
     }
     load()
@@ -49,23 +57,11 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
     runTimerRef.current = setTimeout(() => setHoverRun(false), 200)
   }
 
-  // Calculations
-  const now = new Date().getTime()
-  const ninetyDaysAgo = now - 90 * 24 * 60 * 60 * 1000
+  // Calculations — 90-day total comes directly from API-filtered runs
+  const totalKm90d = runs90d.reduce((acc, r) => acc + r.distance, 0)
 
-  const runs = activities.filter((a) => isRunActivity(a.sport_type))
-
-  const recentRuns90d = runs.filter(
-    (a) => new Date(a.start_date).getTime() > ninetyDaysAgo,
-  )
-  const totalKm90d = recentRuns90d.reduce((acc, r) => acc + r.distance, 0)
-  const last4Runs = runs.slice(0, 4)
-
-  // Best run (longest distance)
-  const bestRun =
-    runs.length > 0
-      ? [...runs].sort((a, b) => b.distance - a.distance)[0]
-      : null
+  // Best run: longest distance, tiebreaker = faster pace
+  const bestRun: StravaActivity | null = findBestRun(runs90d)
 
   if (isBrutalism) {
     return (
@@ -117,9 +113,15 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
                 Recent Runs
               </h4>
               <div className="space-y-3">
-                {last4Runs.map((run) => (
-                  <div key={run.id} className="flex flex-col gap-0.5">
-                    <p className="text-xs font-black text-[#111] truncate">
+                {recentRuns.map((run) => (
+                  <a
+                    key={run.id}
+                    href={`https://www.strava.com/activities/${run.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col gap-0.5 group/run"
+                  >
+                    <p className="text-xs font-black text-[#111] truncate group-hover/run:text-[#FC4C02] transition-colors">
                       {run.name}
                     </p>
                     <div className="flex flex-wrap items-center gap-1.5 text-[0.6rem] font-bold text-[#555]">
@@ -130,13 +132,23 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
                       <span>{formatPace(run.average_speed || 0)}</span>
                       <span className="text-[#CCC]">·</span>
                       <span>{formatDuration(run.moving_time)}</span>
-                      <span className="text-[#CCC]">·</span>
-                      <span>{run.calories ? `${run.calories} kcal` : ''}</span>
+                      {run.total_elevation_gain > 0 && (
+                        <>
+                          <span className="text-[#CCC]">·</span>
+                          <span>{Math.round(run.total_elevation_gain)} mtrs</span>
+                        </>
+                      )}
+                      {run.calories && (
+                        <>
+                          <span className="text-[#CCC]">·</span>
+                          <span>{run.calories} kcal</span>
+                        </>
+                      )}
                     </div>
                     <p className="text-[0.5rem] font-bold uppercase tracking-wider text-[#999]">
                       {formatRelativeDate(run.start_date)}
                     </p>
-                  </div>
+                  </a>
                 ))}
               </div>
 
@@ -145,9 +157,14 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
                   <h4 className="mb-1 text-[0.55rem] font-black uppercase tracking-wider text-[#FC4C02]">
                     👑 Best Recent Run
                   </h4>
-                  <p className="text-xs font-black text-[#111] truncate">
+                  <a
+                    href={`https://www.strava.com/activities/${bestRun.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-black text-[#111] truncate hover:text-[#FC4C02] transition-colors"
+                  >
                     {bestRun.name}
-                  </p>
+                  </a>
                   <div className="flex flex-wrap items-center gap-1.5 text-[0.6rem] font-bold text-[#555]">
                     <span className="text-[#FC4C02]">
                       {formatDistance(bestRun.distance)}
@@ -156,6 +173,12 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
                     <span>{formatPace(bestRun.average_speed || 0)}</span>
                     <span className="text-[#CCC]">·</span>
                     <span>{formatDuration(bestRun.moving_time)}</span>
+                    {bestRun.total_elevation_gain > 0 && (
+                      <>
+                        <span className="text-[#CCC]">·</span>
+                        <span>{Math.round(bestRun.total_elevation_gain)} mtrs</span>
+                      </>
+                    )}
                     {bestRun.calories && (
                       <>
                         <span className="text-[#CCC]">·</span>
@@ -220,9 +243,15 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
               Recent Runs
             </h4>
             <div className="space-y-3">
-              {last4Runs.map((run) => (
-                <div key={run.id} className="flex flex-col gap-0.5">
-                  <p className="text-xs font-medium text-slate-200 truncate">
+              {recentRuns.map((run) => (
+                <a
+                  key={run.id}
+                  href={`https://www.strava.com/activities/${run.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col gap-0.5 group/run"
+                >
+                  <p className="text-xs font-medium text-slate-200 truncate group-hover/run:text-fuchsia-400 transition-colors">
                     {run.name}
                   </p>
                   <div className="flex flex-wrap items-center gap-1.5 text-[0.6rem] text-slate-400">
@@ -233,13 +262,23 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
                     <span>{formatPace(run.average_speed || 0)}</span>
                     <span className="text-slate-500">·</span>
                     <span>{formatDuration(run.moving_time)}</span>
-                    <span className="text-slate-500">·</span>
-                    <span>{run.calories ? `${run.calories} kcal` : ''}</span>
+                    {run.total_elevation_gain > 0 && (
+                      <>
+                        <span className="text-slate-500">·</span>
+                        <span>{Math.round(run.total_elevation_gain)} mtrs</span>
+                      </>
+                    )}
+                    {run.calories && (
+                      <>
+                        <span className="text-slate-500">·</span>
+                        <span>{run.calories} kcal</span>
+                      </>
+                    )}
                   </div>
                   <p className="text-[0.55rem] font-medium uppercase tracking-wider text-slate-500">
                     {formatRelativeDate(run.start_date)}
                   </p>
-                </div>
+                </a>
               ))}
             </div>
 
@@ -248,9 +287,14 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
                 <h4 className="mb-1 text-[0.55rem] font-semibold uppercase tracking-wider text-fuchsia-400">
                   👑 Best Recent Run
                 </h4>
-                <p className="text-xs font-medium text-slate-200 truncate">
+                <a
+                  href={`https://www.strava.com/activities/${bestRun.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-medium text-slate-200 truncate hover:text-fuchsia-400 transition-colors"
+                >
                   {bestRun.name}
-                </p>
+                </a>
                 <div className="flex flex-wrap items-center gap-1.5 text-[0.6rem] text-slate-400">
                   <span className="font-semibold text-fuchsia-400">
                     {formatDistance(bestRun.distance)}
@@ -259,6 +303,12 @@ export function StravaInteractive({ theme }: StravaInteractiveProps) {
                   <span>{formatPace(bestRun.average_speed || 0)}</span>
                   <span className="text-slate-500">·</span>
                   <span>{formatDuration(bestRun.moving_time)}</span>
+                  {bestRun.total_elevation_gain > 0 && (
+                    <>
+                      <span className="text-slate-500">·</span>
+                      <span>{Math.round(bestRun.total_elevation_gain)} mtrs</span>
+                    </>
+                  )}
                   {bestRun.calories && (
                     <>
                       <span className="text-slate-500">·</span>
