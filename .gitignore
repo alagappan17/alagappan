@@ -26,7 +26,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Original, unoptimized assets (keep only optimized versions in git)
+# Original, unoptimized assets. Kept outside public/ so Vite doesn't copy
+# 15MB of unreferenced source media into every build.
+assets-src/
 public/**/original/
 
 # wrangler files
