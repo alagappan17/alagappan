@@ -66,30 +66,30 @@ export const personalInfo = {
     'Beyond code, I’m skidrrow, a digital artist. I use Blender to create product animations, album covers, and experimental pieces. I see digital art as a medium to turn abstract thoughts into visual reality and express ideas with complete creative freedom.',
   ],
   techStack: [
-    { name: 'React', logoUrl: 'https://cdn.simpleicons.org/react/61DAFB' },
+    { name: 'React', logoUrl: '/stack/optimized/React.webp' },
     {
       name: 'TypeScript',
-      logoUrl: 'https://cdn.simpleicons.org/typescript/3178C6',
+      logoUrl: '/stack/optimized/TypeScript.webp',
     },
     {
       name: 'Node.js',
-      logoUrl: 'https://cdn.simpleicons.org/nodedotjs/339933',
+      logoUrl: '/stack/optimized/Node.js.webp',
     },
-    { name: 'Python', logoUrl: 'https://cdn.simpleicons.org/python/3776AB' },
+    { name: 'Python', logoUrl: '/stack/optimized/Python.webp' },
     {
       name: 'PostgreSQL',
-      logoUrl: 'https://cdn.simpleicons.org/postgresql/4169E1',
+      logoUrl: '/stack/optimized/PostgreSQL.svg',
     },
     { name: 'AWS', logoUrl: '/stack/optimized/AWS.webp' },
     { name: 'Docker', logoUrl: '/stack/optimized/Docker.webp' },
-    { name: 'Git', logoUrl: 'https://cdn.simpleicons.org/git/F05032' },
+    { name: 'Git', logoUrl: '/stack/optimized/Git.svg' },
     {
       name: 'JavaScript',
-      logoUrl: 'https://cdn.simpleicons.org/javascript/F7DF1E',
+      logoUrl: '/stack/optimized/JavaScript.svg',
     },
     {
       name: 'Tailwind CSS',
-      logoUrl: 'https://cdn.simpleicons.org/tailwindcss/06B6D4',
+      logoUrl: '/stack/optimized/TailwindCSS.svg',
     },
   ] as TechStackItem[],
   badge: {

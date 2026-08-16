@@ -13,8 +13,8 @@ export const brutalismTheme: ThemeConfig = {
     accentSecondary: '#2EC4B6',
   },
   fonts: {
-    heading: '"Space Grotesk", "Arial Black", sans-serif',
-    body: '"Inter", "Helvetica Neue", sans-serif',
+    heading: '"Space Grotesk Variable", "Space Grotesk", "Arial Black", sans-serif',
+    body: '"Inter Variable", "Inter", "Helvetica Neue", sans-serif',
   },
   cardStyles: {
     containerClassName:
