@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { type ThemeConfig } from '../themes/types'
 
@@ -7,16 +6,31 @@ interface GitHubHeatmapProps {
   username: string
 }
 
-export function GitHubHeatmap({ theme, username }: GitHubHeatmapProps) {
-  const [heatmapUrl, setHeatmapUrl] = useState<string>('')
-  const isBrutalism = theme.id === 'brutalism'
+// The graph renders at a fixed 1000x350; declaring it keeps the image from
+// shifting layout when it arrives from the third-party host.
+const GRAPH_WIDTH = 1000
+const GRAPH_HEIGHT = 350
 
-  useEffect(() => {
-    // Using GitHub Readme Stats API for heatmap
-    // Alternative: You can use your own backend to fetch GitHub contribution data
-    const url = `https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=${isBrutalism ? 'default' : 'github'}&hide_border=true&area=true`
-    setHeatmapUrl(url)
-  }, [username, isBrutalism])
+export function GitHubHeatmap({ theme, username }: GitHubHeatmapProps) {
+  const isBrutalism = theme.id === 'brutalism'
+  const heatmapUrl = `https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=${isBrutalism ? 'default' : 'github'}&hide_border=true&area=true`
+
+  const image = (
+    <motion.img
+      src={heatmapUrl}
+      alt="GitHub Activity Graph"
+      width={GRAPH_WIDTH}
+      height={GRAPH_HEIGHT}
+      loading="lazy"
+      decoding="async"
+      className={`h-auto w-full rounded-lg ${
+        isBrutalism ? 'border-[2px] border-black' : 'border border-white/40'
+      }`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    />
+  )
 
   if (isBrutalism) {
     return (
@@ -24,20 +38,7 @@ export function GitHubHeatmap({ theme, username }: GitHubHeatmapProps) {
         <h4 className="mb-3 text-xs font-black uppercase tracking-wider text-[#111] sm:text-sm">
           GitHub Activity
         </h4>
-        {heatmapUrl ? (
-          <motion.img
-            src={heatmapUrl}
-            alt="GitHub Activity Graph"
-            className="w-full rounded-lg border-[2px] border-black"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          />
-        ) : (
-          <div className="flex h-32 items-center justify-center rounded-lg border-[2px] border-black bg-[#FFFBF3]">
-            <p className="text-sm font-semibold text-[#111]">Loading...</p>
-          </div>
-        )}
+        {image}
       </div>
     )
   }
@@ -47,27 +48,7 @@ export function GitHubHeatmap({ theme, username }: GitHubHeatmapProps) {
       <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-700 sm:text-sm">
         GitHub Activity
       </h4>
-      {heatmapUrl ? (
-        <motion.img
-          src={heatmapUrl}
-          alt="GitHub Activity Graph"
-          className="w-full rounded-lg border border-white/40"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        />
-      ) : (
-        <div className="flex h-32 items-center justify-center rounded-lg border border-white/40 bg-white/10">
-          <p className="text-sm font-semibold text-slate-800">Loading...</p>
-        </div>
-      )}
+      {image}
     </div>
   )
 }
-
-
-
-
-
-
-
