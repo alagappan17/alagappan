@@ -1,26 +1,40 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Static media. Filenames are stable, so these are cached for a year —
+# to publish a change, rename the file.
 /*.glb
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 /artworks/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 /lifestyle/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 /stack/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 /experience/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 /social/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 /icons/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
+
+/games/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/playback/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/profile.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/logo.png
+  Cache-Control: public, max-age=2592000
 
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
