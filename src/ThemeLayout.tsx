@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from 'react'
+import { useEffect, useRef, useState, lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { type ThemeConfig } from './themes/types'
 import { personalInfo } from './content/personal-info'
@@ -39,6 +39,42 @@ function SectionFallback() {
   return (
     <div className="flex min-h-[200px] items-center justify-center">
       <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+    </div>
+  )
+}
+
+/**
+ * Gates a lazy section on viewport proximity. Without this, React mounts every
+ * `lazy()` section on first render, so all section chunks (three-vendor + the
+ * 3D model included) download during initial page load.
+ */
+function Defer({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShow(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '300px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref}>
+      {show ? (
+        <Suspense fallback={<SectionFallback />}>{children}</Suspense>
+      ) : (
+        <div className="min-h-[70vh]" />
+      )}
     </div>
   )
 }
@@ -315,7 +351,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         style={getSecondScreenStyle()}>
         <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
-          <Suspense fallback={<SectionFallback />}>
+          <Defer>
             <motion.div
               initial="initial"
               whileInView="animate"
@@ -326,7 +362,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
                 theme={theme}
               />
             </motion.div>
-          </Suspense>
+          </Defer>
         </div>
       </div>
 
@@ -337,7 +373,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         style={getThirdScreenStyle()}>
         <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
-          <Suspense fallback={<SectionFallback />}>
+          <Defer>
             <motion.div
               initial="initial"
               whileInView="animate"
@@ -350,7 +386,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
                 theme={theme}
               />
             </motion.div>
-          </Suspense>
+          </Defer>
         </div>
       </div>
 
@@ -361,7 +397,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         style={getFourthScreenStyle()}>
         <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
-          <Suspense fallback={<SectionFallback />}>
+          <Defer>
             <motion.div
               initial="initial"
               whileInView="animate"
@@ -369,7 +405,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
               variants={theme.animations.body}>
               <ArtworksSection artworks={personalInfo.artworks} theme={theme} />
             </motion.div>
-          </Suspense>
+          </Defer>
         </div>
       </div>
 
@@ -380,7 +416,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         style={getLifestyleScreenStyle()}>
         <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
-          <Suspense fallback={<SectionFallback />}>
+          <Defer>
             <motion.div
               initial="initial"
               whileInView="animate"
@@ -391,7 +427,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
                 theme={theme}
               />
             </motion.div>
-          </Suspense>
+          </Defer>
         </div>
       </div>
 
@@ -402,7 +438,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
         style={getFifthScreenStyle()}>
         <theme.BackgroundComponent isMobile={isMobile} />
         <div className="relative z-10 mx-auto max-w-6xl">
-          <Suspense fallback={<SectionFallback />}>
+          <Defer>
             <motion.div
               initial="initial"
               whileInView="animate"
@@ -413,7 +449,7 @@ export function ThemeLayout({ theme }: ThemeLayoutProps) {
                 socialLinks={personalInfo.socialLinks}
               />
             </motion.div>
-          </Suspense>
+          </Defer>
         </div>
       </div>
     </>
