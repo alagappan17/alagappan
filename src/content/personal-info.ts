@@ -37,8 +37,10 @@ export interface Project {
   name: string
   description: string
   technologies: string[]
+  highlights?: string[]
   url?: string
-  image?: string
+  displayUrl?: string // Overrides the label derived from `url`
+  logoUrl?: string
 }
 
 export interface Artwork {
@@ -263,25 +265,106 @@ export const personalInfo = {
   ] as TimelineItem[],
   projects: [
     {
-      name: 'HierBridge',
-      description:
-        'Leading the development of an employee-experience platform that tackles lost feedback within organisations. I handle all of the product and engineering work along with technical assistance. Built the MVP from scratch.',
-      technologies: ['React', 'Node.js', 'PostgreSQL'],
-      url: 'https://www.hierbridge.com',
-    },
-    {
       name: 'Bloom',
       description:
-        "Building an early-literacy ed-tech platform end-to-end to help young students become better readers. I've been involved from the very beginning, developing core features, making the product MVP-ready, and supporting multiple integrations within the app.",
-      technologies: ['React', 'TypeScript', 'Node.js'],
+        'An early-literacy platform that helps young students build the foundations of reading with interactive lessons, real-time assessment of how a child actually speaks, and the analytics teachers use to see where a class is heading.',
+      highlights: [
+        'Built the product across the stack, developing interactive learning activities, authentication, administration, and student analytics.',
+        'Built authoring and content management flows that let administrators create and manage lessons, activities, and learning content without engineering involvement.',
+        'Built student activity-tracing infrastructure to capture student interactions and surface learning insights for teachers.',
+        'Built audio management and ASR evaluation through Cobalt for verbal activities, enabling real-time assessment of student speech and pronunciation.',
+        'Worked on application performance, reliability, and beta readiness as the platform progressed toward wider adoption.',
+      ],
+      technologies: ['TypeScript', 'React.js', 'Node.js', 'MongoDB', 'Nx', 'AWS'],
       url: 'https://wearelit.org/bloom/',
+      logoUrl: '/projects/optimized/bloom.webp',
     },
     {
       name: 'WorkHero',
       description:
-        'Built an AI testing framework that evaluates model responses against preset test data. I designed a testing agent that scores outcomes based on a rubric, helping the team measure accuracy, consistency, and reliability across prompts and scenarios.',
-      technologies: ['Python', 'TypeScript', 'AI/ML'],
+        'An AI-powered back-office platform for HVAC businesses. I built an evaluation framework for agents that scored the action the agent took against a rubric and measured the accuracy.',
+      highlights: [
+        'Developed LLM evaluation workflows to test and compare AI behaviour across different prompts, workflows, and use cases.',
+        'Built an AI testing agent that evaluates LLM outputs against a predefined rubric, measuring response accuracy, consistency, and adherence to expected behaviour.',
+      ],
+      technologies: ['TypeScript', 'React.js', 'Node.js', 'MongoDB', 'Nx'],
       url: 'https://www.workhero.pro/',
+      logoUrl: '/projects/optimized/workhero.webp',
+    },
+    {
+      name: 'Agentic ERP',
+      description:
+        'An ERP platform where AI agents run the work across Sales, Hiring and People Management. I built the hiring side of it, from ai-powered resume screening to a new type of agentic coding evaluation system all built into a custom ATS',
+      highlights: [
+        'Worked on the hiring module, building workflows for candidate screening, assessment, evaluation, and recruitment.',
+        'Developed an AI-powered resume evaluation and candidate-job matchmaking system to identify suitable candidates for open roles.',
+        "Built an AI-powered coding assessment evaluator that analyses Claude Code session logs to assess candidates' agentic coding abilities against customisable rubrics and job-specific evaluation signals.",
+        'Built a functional ATS with job boards, job creation, application tracking, and related integrations.',
+      ],
+      technologies: [
+        'TypeScript',
+        'React.js',
+        'NestJS',
+        'Node.js',
+        'Mastra',
+        'PostgreSQL',
+        'pgvector',
+      ],
+    },
+    {
+      name: '52wknds',
+      description:
+        'A travel membership that turns every weekend into a getaway, built on curated calendars, flights and stays. Built an agent agent that researches and assembles an entire year of destinations and travel calendars on its own.',
+      highlights: [
+        'Built an AI-powered travel calendar agent that autonomously researches events, creates and enriches destinations, assigns contextual windows, sources images, and generates complete yearly calendars through a multi-step tool-use workflow.',
+        'Developed an LLM-powered hotel classification system that analyses reviews, property details, and facilities to categorise hotels into structured vibe types using confidence-scored evaluation rubrics.',
+      ],
+      technologies: [
+        'TypeScript',
+        'React Native (Expo)',
+        'Fastify',
+        'PostgreSQL',
+        'PostGIS',
+      ],
+      url: 'https://storiilabs.com/',
+      logoUrl: '/projects/optimized/52wknds.webp',
+    },
+    {
+      name: 'Memory Soda',
+      description:
+        'A memory layer that gives AI agents context that survives the conversation. Working, episodic and semantic memory behind a single retrieval call, plus a dashboard for watching an agent’s memory change over time.',
+      highlights: [
+        'Designed and built a three-tier memory architecture combining working memory for active conversations, episodic memory for past interactions, and semantic memory for long-term facts and relationships.',
+        'Built hybrid memory retrieval using pgvector similarity search and recency-based scoring, allowing agents to retrieve relevant context.',
+        'Used LLMs for conversation summarisation, embeddings, knowledge extraction, and resolving conflicting information, with memory processing handled asynchronously in the background.',
+        'Built a developer dashboard and interactive playground to inspect and debug how an agent’s memory changes over time.',
+        'Developed a TypeScript SDK that lets agents retrieve relevant context through a single interface.',
+      ],
+      technologies: [
+        'TypeScript',
+        'Node.js',
+        'React.js',
+        'PostgreSQL',
+        'pgvector',
+        'Nx',
+      ],
+      url: 'https://github.com/alagappan17/memory-soda',
+      displayUrl: 'github.com',
+      logoUrl: '/projects/optimized/memory-soda.webp',
+    },
+    {
+      name: 'HierBridge',
+      description:
+        'A Voice of Employee platform for feedback and workplace concerns, built from the ground up. This project was a part of Carnegie Mellon’s Project Olympus Program and Founder University Cohort 10.',
+      highlights: [
+        'Built the product from the ground up, working across product development, architecture, and implementation.',
+        'Built core product capabilities like feedback and case management along with administrative workflows for managing employees and organisational content.',
+        'Worked directly with prospective users to conduct market research, understand business requirements, validate product ideas, and iterate on the product based on feedback.',
+        "Selected for Carnegie Mellon University's Project Olympus program and Founder University Cohort 10.",
+      ],
+      technologies: ['TypeScript', 'React.js', 'Node.js', 'MongoDB', 'AWS'],
+      url: 'https://hierbridge.com/',
+      logoUrl: '/projects/optimized/hierbridge.svg',
     },
   ] as Project[],
   artworks: [
