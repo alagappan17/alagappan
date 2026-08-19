@@ -314,7 +314,7 @@ export const personalInfo = {
     {
       name: '52wknds',
       description:
-        'A travel membership that turns every weekend into a getaway, built on curated calendars, flights and stays. Built an agent agent that researches and assembles an entire year of destinations and travel calendars on its own.',
+        'A travel membership that turns every weekend into a getaway, built on curated calendars, flights and stays. Built an ai agent that researches and assembles an entire year of destinations and travel calendars on its own.',
       highlights: [
         'Built an AI-powered travel calendar agent that autonomously researches events, creates and enriches destinations, assigns contextual windows, sources images, and generates complete yearly calendars through a multi-step tool-use workflow.',
         'Developed an LLM-powered hotel classification system that analyses reviews, property details, and facilities to categorise hotels into structured vibe types using confidence-scored evaluation rubrics.',
