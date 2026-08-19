@@ -62,7 +62,7 @@ export function DevPortfolioSection({
           </motion.div>
 
           {/* Projects grid */}
-          <div className="grid gap-4 sm:gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+          <div className="grid auto-rows-fr gap-4 sm:gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {projects.map((project, index) => (
               <motion.div
                 key={project.name}
@@ -78,7 +78,7 @@ export function DevPortfolioSection({
                   boxShadow: '8px 8px 0 0 #111',
                   transition: { duration: 0.3, ease: 'easeOut' },
                 }}
-                className={`relative overflow-hidden rounded-2xl border-[3px] border-black bg-white p-5 shadow-[6px_6px_0_0_#111] sm:rounded-3xl sm:border-4 sm:p-6 ${
+                className={`relative flex flex-col overflow-hidden rounded-2xl border-[3px] border-black bg-white p-5 shadow-[6px_6px_0_0_#111] sm:rounded-3xl sm:border-4 sm:p-6 ${
                   index % 3 === 0
                     ? 'rotate-[0.5deg]'
                     : index % 3 === 1
@@ -108,9 +108,27 @@ export function DevPortfolioSection({
                   transition={{ duration: 0.3 }}
                 />
 
+                {/* Logo box - same treatment as the experience timeline */}
+                {project.logoUrl && (
+                  <div className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg border-[2.5px] border-black bg-white sm:right-5 sm:top-5 sm:h-12 sm:w-12">
+                    <img
+                      src={project.logoUrl}
+                      alt={`${project.name} logo`}
+                      width={48}
+                      height={48}
+                      className="h-full w-full object-contain"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                )}
+
                 {/* Content */}
-                <div className="relative z-10">
-                  <h3 className="mb-2 text-lg font-black text-[#111] sm:mb-3 sm:text-xl">
+                <div className="relative z-10 flex h-full flex-col">
+                  <h3
+                    className={`mb-4 text-lg font-black text-[#111] sm:mb-5 sm:text-xl ${
+                      project.logoUrl ? 'pr-12 sm:pr-14' : ''
+                    }`}>
                     {project.name}
                   </h3>
                   <p className="mb-3 text-sm leading-relaxed text-[#333] sm:mb-4 sm:text-base">
@@ -123,14 +141,14 @@ export function DevPortfolioSection({
                       href={project.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      whileHover={{ 
+                      whileHover={{
                         scale: 1.05,
                         boxShadow: '3px 3px 0 0 #111',
                         y: -2,
                       }}
                       whileTap={{ scale: 0.95 }}
-                      className="mt-4 inline-flex items-center gap-1.5 rounded-lg border-[2.5px] border-black bg-[#1A9B8E] px-3 py-1.5 text-xs font-black uppercase tracking-wide text-white shadow-[2px_2px_0_0_#111] transition-all hover:bg-[#2EC4B6] sm:gap-2 sm:px-4 sm:py-2 sm:text-sm">
-                      {getDisplayUrl(project.url)}
+                      className="inline-flex w-fit items-center gap-1.5 rounded-lg border-[2.5px] border-black bg-[#1A9B8E] px-3 py-1.5 text-xs font-black uppercase tracking-wide text-white shadow-[2px_2px_0_0_#111] transition-all hover:bg-[#2EC4B6] sm:gap-2 sm:px-4 sm:py-2 sm:text-sm">
+                      {project.displayUrl ?? getDisplayUrl(project.url)}
                       <span>→</span>
                     </motion.a>
                   )}
